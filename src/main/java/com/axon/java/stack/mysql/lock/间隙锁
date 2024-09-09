@@ -1,0 +1,26 @@
+假设有一个表 test，包含如下数据：
+
++----+-------+
+| id | value |
++----+-------+
+|  5 |     1 |
+| 10 |     2 |
+| 15 |     3 |
++----+-------+
+
+
+假设有两个会话 Session1 和 Session2：
+
+1.Session1 执行以下操作：
+    START TRANSACTION;
+    SELECT * FROM test WHERE id BETWEEN 5 AND 15 FOR UPDATE;
+
+这会导致 MySQL 锁定 id=5 和 id=15 之间的间隙，即锁住了 id=5 和 id=15 之间的范围（如 id=7）。
+
+
+2.Session2 试图插入一条新记录：
+
+INSERT INTO test (id, value) VALUES (7, 4);
+由于 Session1 已经锁住了 id=5 和 id=15 之间的间隙，Session2 的插入操作将会被阻塞，直到 Session1 提交或回滚事务。
+
+间隙锁是 MySQL InnoDB 引擎中的一种重要锁机制，通过锁定记录之间的间隙来防止幻读和数据插入冲突。虽然它能够保护数据一致性，但也会对并发性产生影响。因此，在使用过程中需要权衡事务隔离性和系统性能。

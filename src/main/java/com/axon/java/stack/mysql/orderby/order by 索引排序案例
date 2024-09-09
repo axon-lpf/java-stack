@@ -1,0 +1,28 @@
+为排序使用索引
+mysql有两种排序方式，文件排序和扫描有序索引排序
+mysql能为排序与查询使用相同的索引
+
+
+假设a_b_c(a,b,c) 索引
+
+order by 能使用索引最左前缀
+
+    order by a
+    order by a,b
+    order by a,b,c
+    order by a desc,b desc, c desc
+
+如果where 使用索引的最左前缀定义为常量，则order by 能使用索引
+
+    where a=const order by b,c
+    where a=const and b=const order by c
+    where a=const order by b,c
+    where a=const and b>const order by b,c
+
+不能使用索引的排序
+
+    order by  a asc,b desc, c desc // 排序不一致
+    where g=const order by b, c  //丢失索引a
+    where a=const order by c  // 丢失索引b
+    where a=const  order by a,d  //d 不是索引的一部分
+    where a in(...) order by b,c   //对于排序来说，多个相等的条件也是范围

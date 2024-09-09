@@ -1,0 +1,68 @@
+Spring 框架的底层执行原理，你可以从以下几个关键步骤进行详细说明。这些步骤涵盖了 Spring 框架的核心概念和执行流程，包括 IoC 容器的创建、Bean 的管理、依赖注入等方面的原理：
+
+1. Spring 容器初始化
+
+	•	启动 Spring 容器：Spring 容器的启动通常通过 ApplicationContext 实现，例如 ClassPathXmlApplicationContext 或 AnnotationConfigApplicationContext。
+	•	配置元数据：Spring 容器读取配置文件（如 applicationContext.xml 或使用 @Configuration 注解的 Java 配置类）或注解来初始化容器。
+
+2. 读取 Bean 定义
+
+	•	解析配置：容器解析 XML 配置文件中的 Bean 定义，或者解析使用注解定义的 Bean（如 @Component、@Service、@Repository、@Controller）。
+	•	创建 BeanDefinition：每个 Bean 的定义被封装在 BeanDefinition 对象中，其中包含 Bean 的类、作用域、初始化方法、销毁方法等信息。
+
+3. Bean 实例化
+
+	•	创建 Bean 实例：根据 BeanDefinition，Spring 容器创建 Bean 实例。实例化的过程可以通过反射机制来完成。
+	•	依赖注入：Spring 容器将依赖项注入到 Bean 中。依赖注入可以通过构造器注入、属性注入或方法注入来完成，具体取决于 Bean 的配置。
+
+4. 设置 Bean 属性
+
+	•	依赖解析：容器解析 Bean 的依赖，自动注入其他 Bean 或资源。这包括对 @Autowired、@Inject 和 @Resource 注解的处理。
+	•	执行初始化方法：如果 Bean 定义中配置了初始化方法，Spring 容器会在 Bean 实例化和属性设置后调用这些初始化方法。
+
+5. Bean 生命周期管理
+
+	•	Bean 生命周期：Spring 管理 Bean 的整个生命周期，从创建、初始化到销毁。可以使用 @PostConstruct 和 @PreDestroy 注解定义初始化和销毁方法。
+	•	销毁 Bean：当应用程序关闭时，Spring 容器会调用 Bean 的销毁方法以释放资源。销毁方法可以在 @PreDestroy 注解下定义，或通过 DisposableBean 接口实现。
+
+6. AOP（面向切面编程）
+
+	•	代理创建：Spring 支持 AOP，通过代理模式在 Bean 方法调用前后插入横切逻辑。Spring 使用 JDK 动态代理或 CGLIB 代理实现 AOP。
+	•	切面和通知：切面（Aspect）定义了横切逻辑，通知（Advice）定义了具体的操作（如前置通知、后置通知、异常通知等）。
+
+7. 事件机制
+
+	•	事件发布：Spring 支持事件机制，允许应用程序在容器中发布和处理事件。使用 ApplicationEventPublisher 发布事件，使用 @EventListener 注解或实现 ApplicationListener 接口处理事件。
+	•	事件监听：注册的事件监听器会响应相关的事件并执行相应的处理逻辑。
+
+8. 事务管理
+
+	•	事务配置：Spring 提供声明式事务管理，可以通过 @Transactional 注解或 XML 配置来管理事务。
+	•	事务代理：Spring 使用代理机制（基于 AOP）来处理事务的开始、提交和回滚，确保事务的一致性和完整性。
+
+总结
+
+Spring 框架 的底层执行原理涵盖了从容器初始化、Bean 管理、依赖注入、生命周期管理到 AOP 和事件机制等多个方面。
+Spring 框架通过 IOC 容器管理 Bean 的创建和生命周期，通过 AOP 实现横切逻辑的分离，通过事件机制和事务管理提供强大的功能支持。了解这些原理有助于更好地理解 Spring 的工作机制及其在实际应用中的使用。
+
+
+
+
+spring 中如何解决循环依赖的问题？  假如A service 和B  service , A依赖B ， B 又依赖A ? 该如何处理？ 请详细描述？
+
+Spring 解决循环依赖的机制
+
+Spring 通过依赖注入（DI）和智能 Bean 初始化来处理循环依赖问题。Spring 的 IoC 容器采用了两种主要机制来解决循环依赖：
+
+	1.	构造器注入：Spring 不支持构造器注入的循环依赖。构造器注入需要所有的依赖在 Bean 实例化时就被提供，因此如果 A 和 B 是构造器注入且彼此互相依赖，Spring 无法处理这类循环依赖，会抛出异常。这种情况下，需要修改依赖注入的方式，例如改为使用字段注入或方法注入。
+	2.	Setter 注入（或字段注入）：Spring 能够处理 Setter 注入（或字段注入）类型的循环依赖。Spring 使用了三级缓存机制来解决循环依赖问题。具体流程如下：
+	•	一级缓存：存储完全初始化的 Bean 实例。
+	•	二级缓存：存储正在创建中的 Bean 实例，这些 Bean 实例尚未完成初始化，但可以用于解决循环依赖。
+	•	三级缓存：存储待注入的 Bean 实例，即 Bean 实例正在创建中，但其依赖项尚未完全注入。
+
+解决循环依赖的具体步骤
+    1.获取A实例时， 在以及缓存中找不到时， 则实例化A， 将A 添加到三级缓存中
+    2.对A进行属性依赖注入时， 发现依赖B， B 从一级缓去寻找，找不到则实例化B，B加入到三级缓存中。
+    3.对B进行属性依赖注入时， 又发现依赖A，则从三级缓存中获取A的实例并赋值，并将A添加到二级缓存中，此时则B注入成功。
+    4.B进行初始化，加入到一级缓存中
+    5.此时A的属性也注入成功， A完成初始化，将A添加到一级缓存中,移除二级缓存。

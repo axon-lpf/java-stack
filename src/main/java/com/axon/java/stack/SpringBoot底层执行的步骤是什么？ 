@@ -1,0 +1,63 @@
+Spring Boot 的底层执行原理时，你可以从以下几个关键步骤进行详细说明。这些步骤涵盖了 Spring Boot 应用的启动过程、自动配置、依赖注入等方面的核心原理：
+
+1. 应用启动
+
+	•	启动类：Spring Boot 应用通常有一个 @SpringBootApplication 注解的启动类。这个注解是组合注解，包含了 @Configuration、@EnableAutoConfiguration 和 @ComponentScan。
+	•	主方法：启动类中的 main 方法调用 SpringApplication.run() 方法，这个方法是 Spring Boot 应用的入口点。
+
+2. SpringApplication 初始化
+
+	•	创建 SpringApplication 实例：SpringApplication 实例会被创建并初始化，这个实例负责配置和启动应用。
+	•	设置环境：通过 SpringApplication.setEnvironment() 方法设置环境属性，例如 application.properties 或 application.yml 中的配置。
+
+3. 准备上下文
+
+	•	创建 ApplicationContext：Spring Boot 创建 ApplicationContext，通常是 AnnotationConfigServletWebServerApplicationContext，用于管理 Spring 容器。
+	•	加载应用程序的环境：读取和解析配置文件中的属性，将其加载到 Spring 环境中。
+
+4. 自动配置
+
+	•	启用自动配置：@EnableAutoConfiguration 注解触发了 Spring Boot 的自动配置机制。Spring Boot 会根据类路径中的库、环境变量、属性等信息，自动配置 Spring 容器中的 Bean。
+	•	条件配置：自动配置的实现是基于 @Conditional 注解的，只有当满足特定条件时，自动配置才会生效。例如，@ConditionalOnClass、@ConditionalOnProperty 等。
+
+5. 扫描 Bean
+
+	•	组件扫描：@ComponentScan 注解触发了组件扫描，Spring Boot 会扫描指定包下的所有组件（如 @Component、@Service、@Repository、@Controller），并将其注册到 Spring 容器中。
+	•	加载 Bean：Spring Boot 根据配置创建和初始化应用上下文中的 Bean。
+
+6. 启动嵌入式服务器
+
+	•	创建嵌入式服务器：对于 Web 应用，Spring Boot 会创建并启动嵌入式 Web 服务器（如 Tomcat、Jetty、Undertow）。SpringBootServletInitializer 类用于支持传统的 WAR 部署。
+	•	注册 Servlet：自动配置的过程会注册必要的 Servlets、Filters 和 Listeners。
+
+7. 初始化 Web 应用
+
+	•	Web 环境初始化：对于 Web 应用，Spring Boot 会初始化 Web 环境，加载 Web 相关的配置，例如 Web MVC 配置、视图解析器等。
+	•	DispatcherServlet：DispatcherServlet 被注册到 Web 应用中，负责处理 HTTP 请求并将其分发给相应的控制器。
+
+8. 启动应用
+
+	•	启动事件：应用上下文启动并发布启动事件，例如 ContextRefreshedEvent 和 ApplicationReadyEvent。这些事件可以用于在应用启动后执行额外的初始化逻辑。
+	•	应用运行：Spring Boot 应用现在处于运行状态，可以处理来自客户端的请求或执行后台任务。
+
+9. 关闭应用
+
+	•	关闭钩子：当应用关闭时，Spring Boot 会触发关闭钩子，执行清理操作，例如关闭嵌入式服务器、关闭数据源等。
+	•	上下文销毁：ApplicationContext 被销毁，所有注册的 Bean 会被销毁，释放资源。
+
+总结
+
+Spring Boot 启动过程是一个多步骤的过程，从初始化 Spring 应用程序、自动配置和扫描 Bean 到启动嵌入式服务器和应用的完整流程。这个过程涉及了自动配置、环境设置、组件扫描和服务器初始化等核心机制，确保应用能够顺利启动并提供所需的功能。
+
+
+
+spring 和 springBoo的主要区别？
+
+主要区别
+	1.	自动配置：Spring Boot 提供了自动配置功能，可以大大简化配置，Spring 需要手动配置。
+	2.	嵌入式服务器：Spring Boot 支持嵌入式服务器，使得应用可以独立运行，Spring 传统上依赖外部应用服务器。
+	3.	起步依赖：Spring Boot 提供了起步依赖来简化项目的依赖管理，Spring 需要手动配置和管理依赖。
+	4.	配置管理：Spring Boot 提供了集中化的配置文件和配置管理机制，Spring 的配置管理相对更分散。
+
+总结
+    Spring 和 Spring Boot 都基于 Spring 的核心原理，但 Spring Boot 在此基础上引入了自动配置、起步依赖、嵌入式服务器等功能，以简化开发过程和提高生产力。了解这些底层原理有助于更好地利用这两个框架的功能。

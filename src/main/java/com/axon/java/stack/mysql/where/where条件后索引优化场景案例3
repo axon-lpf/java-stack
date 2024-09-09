@@ -1,0 +1,51 @@
+假设index(c1,c2,c3,c4) 索引。
+
+
+1. explain select * from test03  where c1='a1' and c2='a2' and c3='a3'  and c4='a4'
+
+
+2. explain select * from test03  where c1='a1' and c2='a2' and c4='a4' and c3='a3'
+
+
+3.explain select * from test03  where c1='a1' and c2='a2'  and c3>'a3'  and c4='a4'
+
+
+4.explain select * from test03  where c1='a1' and c2='a2'  and c4>'a4'  and c3='a3'
+
+
+5.explain select * from test03  where c1='a1' and c2='a2'  and c4='a4'  order by c3
+
+  c3的作用是在排序，而不是查找
+
+6.explain select * from test03  where c1='a1' and c2='a2'  order by c3
+
+  使用c1和c2索引， c3用于排序
+
+7.explain select * from test03  where c1='a1' and c2='a2'  order by c4
+
+  使用c1和c2索引， 出现了filesort
+
+8.explain select * from test03  where c1='a1' and c5='a5'   order by c2, c3
+
+  使用了c1的索引， c2和c3用于排序
+
+8.explain select * from test03  where c1='a1' and c5='a5'   order by c3, c2
+
+  出现了filesort
+
+9.explain select * from test03  where c1='a1' and c2='a2'   order by  c2, c3
+
+
+10.explain select * from test03  where c1='a1' and c2='a2' and c5='a5'   order by  c2, c3
+
+   使用了c1和c2两个索引， c2和c3用于排序
+
+   explain select * from test03  where c1='a1' and c2='a2' and c5='a5'   order by  c3, c2
+
+   出现了filesort
+
+
+11.explain select * from test03  where c1='a1' and c4='a4'  order by  c2, c3
+
+
+

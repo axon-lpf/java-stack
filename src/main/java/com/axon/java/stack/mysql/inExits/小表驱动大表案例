@@ -1,0 +1,19 @@
+
+假设有A、 B 两张表。
+
+当前B表的数据集小于A表的数据集，用in 则优于exists
+
+select * from A  where id in(select id from B)
+
+
+
+
+当前B表的数据集大于A表的数据集，用in 则优于exists
+
+select * from A as a  where exists (select id from B as b  where b.id=a.id)
+
+
+
+
+
+

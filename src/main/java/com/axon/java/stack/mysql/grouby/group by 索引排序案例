@@ -1,0 +1,4 @@
+group by 实质是先排序后进行分组，遵照索引建立最左前缀发
+
+当无法使用索引是，增大max_length_for_sort_data参数的设置+ 增大sort_buffer_size参数设置
+where 高于having,能写where之后的条件，就不要写在having之后了。

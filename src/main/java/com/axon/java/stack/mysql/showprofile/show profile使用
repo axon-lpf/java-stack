@@ -1,0 +1,24 @@
+1. 查询show profile 默认值配置
+    show variables like 'profiling'
+
+2.开启命令
+    set profiling=on
+
+3.执行案例命令
+    show profile cpu,block io for query 3
+
+4.查询类型
+    ALL   --显示所有的开销信息
+    block io   -- 显示io相关的开销
+    context switches   --上下文切换的相关信息
+    cpu  --显示cpu相关的信息
+    ipc  --显示发送和接收的相关信息
+    memory --显示内存相关信息
+    page faults  -- 显示页面错误相关信息
+    source   --显示source_function、 source_file 相关信息， source_line 相关的开销
+
+5.出现一下特殊命令，则需要优化
+    converting HEAP to MyISAM  查询结果太大，内存都不够用了，往磁盘上班了
+    creating temp table 创建临时表
+    copying to temp table on disk  将临时表copy到磁盘上了
+    locked 锁。

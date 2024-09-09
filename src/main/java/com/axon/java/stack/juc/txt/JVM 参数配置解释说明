@@ -1,0 +1,101 @@
+on-default VM flags: -XX:CICompilerCount=12 -XX:+CMSParallelRemarkEnabled -XX:ErrorFile=null -XX:+ExplicitGCInvokesConcurrent -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=null -XX:InitialHeapSize=536870912 -XX:LargePageSizeInBytes=268435456 -XX:MaxHeapSize=1073741824 -XX:MaxNewSize=314572800 -XX:MaxTenuringThreshold=6 -XX:MinHeapDeltaBytes=196608 -XX:NewSize=314572800 -XX:OldPLABSize=16 -XX:OldSize=222298112 -XX:-OmitStackTraceInFastThrow -XX:+PrintGC -XX:+PrintGCDateStamps -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+ReduceInitialCardMarks -XX:+StartAttachListener -XX:ThreadStackSize=512 -XX:+UseCMSCompactAtFullCollection -XX:+UseCMSInitiatingOccupancyOnly -XX:+UseCompressedClassPointers -XX:+UseCompressedOops -XX:+UseConcMarkSweepGC -XX:-UseFastAccessorMethods -XX:+UseParNewGC
+Command line:  -Xmx1g -Xms512m -Xmn300m -Xss512k -XX:-OmitStackTraceInFastThrow -XX:LargePageSizeInBytes=256m -XX:+StartAttachListener -XX:+ExplicitGCInvokesConcurrent -XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:+CMSParallelRemarkEnabled -XX:+UseCMSCompactAtFullCollection -XX:+UseFastAccessorMethods -XX:+UseCMSInitiatingOccupancyOnly -XX:+UseCompressedOops -XX:+ReduceInitialCardMarks -XX:+HeapDumpOnOutOfMemoryError -XX:ErrorFile=/var/logs/springboot/aduer-platform-order-soa/hs_err.log -XX:HeapDumpPath=/var/logs/springboot/aduer-platform-order-soa/java_pid.hprof -XX:+PrintGCDetails -XX:+PrintGCDateStamps -verbose:gc -Xloggc:/var/logs/springboot/aduer-platform-order-soa/gc.log -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Dsun.misc.URLClassPath.disableJarChecking=true -Dsun.net.inetaddr.ttl=0 -Dlog.dir=/var/logs/springboot/aduer-platform-order-soa/ -Ddata.dir=/var/logs/springboot/aduer-platform-order-soa/ -Dtmp.dir=/var/logs/springboot/aduer-platform-order-soa/ -Dfile.encoding=UTF-8 -Dcache.dir=/var/logs/springboot/aduer-platform-order-soa/ -Dcom.alibaba.nacos.naming.cache.dir=/var/logs/springboot/aduer-platform-order-soa/nacos/ -Dons.client.logRoot=/var/logs/springboot/aduer-platform-order-soa/ -Dons.client.logFileMaxIndex=7 -Dnacos.logging.path=/var/logs/springboot/aduer-platform-order-soa -Dproject.name=aduer-platform-order-soa -Dcsp.sentinel.log.use.pid=true -Dfile.encoding=UTF-8 -Dlog4j.defaultInitOverride=false -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=65012
+
+
+
+这些 JVM 参数用于调整 Java 虚拟机 (JVM) 的行为和性能，分为以下几类：编译选项、垃圾回收设置、内存管理、错误处理、日志记录等。以下是这些参数的具体意义：
+
+1. 编译器设置
+
+	•	-XX:CICompilerCount=12：设置 JIT 编译器的线程数量为 12。
+	•	-XX:+UseFastAccessorMethods：加快方法调用速度。
+
+2. 垃圾回收 (GC) 设置
+
+	•	-XX:+UseConcMarkSweepGC：使用并发标记-清除 (CMS) 垃圾回收器。
+	•	-XX:+UseParNewGC：在年轻代使用并行复制垃圾回收器，与 CMS 结合使用。
+	•	-XX:+CMSParallelRemarkEnabled：在 CMS 的标记阶段使用并行线程来减少暂停时间。
+	•	-XX:+UseCMSCompactAtFullCollection：在 CMS 的 Full GC 阶段对内存进行压缩，减少碎片。
+	•	-XX:+UseCMSInitiatingOccupancyOnly：仅当堆的使用达到启动占用率时才启动 CMS。
+	•	-XX:MaxTenuringThreshold=6：设置对象从年轻代到老年代的最大晋升年龄为 6。
+	•	-XX:+ExplicitGCInvokesConcurrent：显式的 System.gc() 调用触发并发 GC。
+	•	-XX:NewSize=314572800：设置年轻代大小为 300 MB。
+	•	-XX:MaxNewSize=314572800：设置年轻代最大大小为 300 MB。
+	•	-XX:OldSize=222298112：设置老年代初始大小为 222 MB。
+	•	-XX:OldPLABSize=16：设置老年代中每个线程本地分配缓冲区 (PLAB) 的大小为 16 KB。
+	•	-XX:InitialHeapSize=536870912：设置初始堆大小为 512 MB。
+	•	-XX:MaxHeapSize=1073741824：设置最大堆大小为 1 GB。
+	•	-XX:HeapDumpOnOutOfMemoryError：在内存溢出时生成堆转储。
+	•	-XX:HeapDumpPath=null：指定堆转储的路径为空。
+	•	-XX:+PrintGCDetails：打印 GC 详细信息。
+	•	-XX:+PrintGCDateStamps：在 GC 日志中打印日期时间戳。
+	•	-XX:+PrintGCTimeStamps：在 GC 日志中打印时间戳。
+	•	-XX:+ReduceInitialCardMarks：减少初始卡标记。
+	•	-XX:+CMSParallelRemarkEnabled：使 CMS 垃圾收集器的 remark 阶段并行化。
+
+3. 内存管理
+
+	•	-XX:LargePageSizeInBytes=268435456：设置大页大小为 256 MB。
+	•	-XX:+UseCompressedClassPointers：启用类指针的压缩。
+	•	-XX:+UseCompressedOops：启用普通对象指针 (OOPs) 的压缩。
+	•	-XX:ThreadStackSize=512：设置线程堆栈大小为 512 KB。
+	•	-Xms512m：设置 JVM 初始堆大小为 512 MB。
+	•	-Xmx1g：设置 JVM 最大堆大小为 1 GB。
+	•	-Xmn300m：设置年轻代大小为 300 MB。
+	•	-Xss512k：设置每个线程的堆栈大小为 512 KB。
+	•	-XX:MinHeapDeltaBytes=196608：设置堆增长的最小增量为 192 KB。
+
+4. 错误处理
+
+	•	-XX:ErrorFile=null：指定 JVM 错误日志的路径为空。
+	•	-XX:ErrorFile=/var/logs/springboot/aduer-platform-order-soa/hs_err.log：指定错误日志文件的路径。
+	•	-XX:HeapDumpPath=/var/logs/springboot/aduer-platform-order-soa/java_pid.hprof：指定堆转储文件的路径。
+
+5. 日志记录
+
+	•	-XX:+PrintGCDetails：启用 GC 详细日志。
+	•	-XX:+PrintGCDateStamps：在 GC 日志中添加日期时间戳。
+	•	-Xloggc:/var/logs/springboot/aduer-platform-order-soa/gc.log：将 GC 日志输出到指定文件。
+
+6. 调试设置
+
+	•	-XX:-OmitStackTraceInFastThrow：在快速抛出异常时不省略堆栈跟踪。
+	•	-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=65012：启用 JDWP 代理，用于远程调试，端口号为 65012。
+
+7. 系统属性
+
+	•	-Dsun.misc.URLClassPath.disableJarChecking=true：禁用 JAR 文件的 URL 连接检查。
+	•	-Dsun.net.inetaddr.ttl=0：设置 DNS 缓存的 TTL 为 0 秒。
+	•	-Dlog.dir=/var/logs/springboot/aduer-platform-order-soa/：设置日志目录路径。
+	•	-Ddata.dir=/var/logs/springboot/aduer-platform-order-soa/：设置数据目录路径。
+	•	-Dtmp.dir=/var/logs/springboot/aduer-platform-order-soa/：设置临时文件目录路径。
+	•	-Dfile.encoding=UTF-8：设置文件编码为 UTF-8。
+	•	-Dcache.dir=/var/logs/springboot/aduer-platform-order-soa/：设置缓存目录路径。
+	•	-Dcom.alibaba.nacos.naming.cache.dir=/var/logs/springboot/aduer-platform-order-soa/nacos/：设置 Nacos 的缓存目录路径。
+	•	-Dons.client.logRoot=/var/logs/springboot/aduer-platform-order-soa/：设置 ONS 客户端日志根目录路径。
+	•	-Dons.client.logFileMaxIndex=7：设置 ONS 客户端日志文件的最大索引数。
+	•	-Dnacos.logging.path=/var/logs/springboot/aduer-platform-order-soa：设置 Nacos 日志路径。
+	•	-Dproject.name=aduer-platform-order-soa：设置项目名称。
+	•	-Dcsp.sentinel.log.use.pid=true：设置 Sentinel 使用进程 ID 进行日志记录。
+
+这些参数通过配置 JVM 内存、垃圾回收、日志、调试和系统属性，以优化 Java 应用的性能、调试和运行环境。
+
+
+-XX:MaxTenuringThreshold=6：设置对象从年轻代到老年代的最大晋升年龄为 6。  意思设置垃圾的最大年龄，即从年轻代到老年代的最大年龄， 最大值是15， 不能设置超过15
+
+
+##1. 第一种查看参数盘点家底
+jps -l
+
+jinfo -flag  Java进程编号
+
+jinfo -flags java进程编号
+
+##2.第二种查看参数盘点家底
+java -XX:+PrintFlagsInitial
+
+java -XX:+PrintFlagsInitial -version
+
+java -XX:+PrintCommandLineFlags -version
+
+

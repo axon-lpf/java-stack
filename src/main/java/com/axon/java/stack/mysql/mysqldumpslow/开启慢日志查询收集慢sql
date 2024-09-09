@@ -1,0 +1,33 @@
+1.开启慢查询日志
+    1.1>命令配置
+        查询默认值：show VARIABLES LIKE '%slow_query_log%'
+        开始方式： set global slow_query_log=1
+    1.2> my.cnf配置文件修改
+        slow_query_log=1
+        slow_query_log_file=/var/logs/mysql/slow.log
+
+    1.3>查询慢sql的阈值
+        show VARIABLES LIKE 'long_query_time%'
+
+    1.4>设置阈值时间
+        set global long_query_time=3;
+
+    1.5>my.cnf配置文件修改
+        slow_query_log=1
+        slow_query_log_file=/var/logs/mysql/slow.log
+        long_query_time=3
+        log_output=FILE
+
+2.mysql 提供了日志分析工具mysqldumpslow 工具
+    2.1>得到返回记录最多的10个sql
+        mysqldumpslow -s r -t 10  /var/logs/mysql/slow.log
+
+    2.2>得到访问次数最多的10个sql
+        mysqldumpslow -s c -t 10  /var/logs/mysql/slow.log
+
+    2.3>得到按照时间排序前10条里面包含做链接查想的语句
+        mysqldumpslow -s t -t 10 -g "left join"  /var/logs/mysql/slow.log
+
+    2.4>另外建议在使用这命令是结合 | 和more使用， 否则会出现爆屏的情况
+        mysqldumpslow -s r -t 10  /var/logs/mysql/slow.log | more
+

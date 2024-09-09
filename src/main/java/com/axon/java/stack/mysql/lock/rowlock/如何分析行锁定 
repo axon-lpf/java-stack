@@ -1,0 +1,13 @@
+使用命令：
+
+    show status like 'innodb_row_lock%'
+
+对于各个状态量的说明如下：
+    innodb_row_lock_current_waits: 当前正在等待锁定的数量
+    innodb_row_lock_time： 从系统启动到现在锁定的时间长度
+    innodb_row_lock_avg： 每次等待花费的平均时间
+    innodb_row_lock_time： 从系统启动到现在锁定的最大的一次时间
+    innodb_row_lock_waits： 从系统启动后到现在等待的次数
+
+
+

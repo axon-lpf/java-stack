@@ -1,0 +1,37 @@
+场景案例
+  有会话session1  和 会话session2 两个分别同时操作数据库mylock表，依次加入读锁、写锁。 使用myISAM引擎
+    加入读锁命令：lock table mylock read
+    释放读锁命令：unlock table mylock read
+
+    加入写锁命令：lock table mylock write
+    释放写锁命令：unlock table mylock write
+
+  1>加入读锁
+
+        session1                                        session2
+  当前会话，可以查询mylock表的记录                     当前会话也可以查询mylock的表的记录，但不能增删改mylock记录
+  当前会话，不能查询其它表的记录                        当前会话也可以查询其它表的记录
+
+  总结： 读锁都是共享的，所以session2也可以查询mylock
+        由于session1没有去释放当前锁，所以不能查询其它表
+
+
+  2>.加入写锁
+
+      session1                                          session2
+  当前会话，可以查询mylock表的记录                   当前会话不可以查询mylock的表的记录
+  当前会话，可以增删改mylock表记录                   当前会话不可以增删改mylock的表的记录
+  当前会话，不能查询，更新其它表的记录                 当前会话也可以查询其它表的记录
+
+  总结： 写锁时独占的，所以session2也不可以查询、怎删改mylock表
+        由于session1没有去释放当前锁，所以不能查询，增删改其它表
+
+
+
+
+可以查看哪些表被枷锁了？
+    show open tables;
+    show status like 'table%'
+    通过检查table_locks_waited  和 table_locks_immediate变量来分析系统上的表锁定
+
+
