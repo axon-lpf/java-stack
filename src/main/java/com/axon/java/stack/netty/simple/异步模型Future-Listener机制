@@ -1,0 +1,17 @@
+
+以下的代码是不会发生阻塞的，
+
+                ChannelFuture channelFuture = serverBootstrap.bind(9000).addListener(future -> {
+                    Thread.sleep(3000);
+                    if (future.isSuccess()) {
+                        System.out.println(new Date() + "9000" + "绑定成功");
+                    } else {
+                        System.out.println("绑定失败");
+                    }
+                });
+
+
+1>isDone方法是来判断当前的操作是否完成
+2>isSuccess判断已完成的当前的操作是否成功
+3>getCase来获取自己当前操作失败的原因
+4>addListener方法来注册监听器，当操作已完成（isDone方法返回完成），将会通知指定的监听器

@@ -1,0 +1,10 @@
+方案说明：
+    1>netty抽象出两组线程吃，BossGroup专门负责客户端的接受连接，WorkGroup专门负责网络的读写工作，
+    2>NioEventLoop表示一个不断循环处理任务的线程，每个NioEventLoop 都有一个selector,用于监听绑定其上socket网络通道
+    3>NioEventLoop 采用了串行化涉及，从消息读取=》解码-》处理=》编码=》发送 始终有NioEventLoop负责。
+
+    NioEventLoopGroup下包含多个NioEventLoop
+    每个NioEventLoop 包含要给selector 和一个taskQueue
+    每个NioEventLoop的 selector 可以监听多个NioChannel
+    每个NioChannel 只会绑定到一个NioEventLoop 上。
+    每个NioChannel 都有一个自己的ChannelPipeline
