@@ -1,5 +1,6 @@
 package com.axon.java.stack.netty.reactor;
 
+import com.axon.java.stack.juc.oom.TheadLimtOverflowTest;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
@@ -21,10 +22,9 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 
+        Thread.sleep(1000*20);
         System.out.println("server cxt=" + ctx);
-
         ByteBuf byteBuf = (ByteBuf) msg;
-
         System.out.println("客户端发送的消息是" + byteBuf.toString(CharsetUtil.UTF_8));
         System.out.println("客户端地址" + ctx.channel().remoteAddress());
     }
