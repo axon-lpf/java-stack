@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Interaction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #messages {
+            border: 1px solid #ccc;
+            padding: 10px;
+            height: 200px;
+            overflow-y: auto;
+        }
+        #messageInput {
+            width: calc(100% - 22px);
+            padding: 10px;
+        }
+        #sendButton {
+            padding: 10px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<h1>WebSocket Interaction</h1>
+<div id="messages"></div>
+<input type="text" id="messageInput" placeholder="Type a message...">
+<button id="sendButton">Send</button>
+
+<script>
+    const wsUrl = 'ws://localhost:9001/hello';
+    const connection = new WebSocket(wsUrl);
+
+    // Track connection status
+    let isConnected = false;
+
+    connection.onopen = () => {
+        console.log('Connected to WebSocket server');
+        isConnected = true; // Update connection status
+    };
+
+    connection.onmessage = (event) => {
+        const messagesDiv = document.getElementById('messages');
+        const newMessage = document.createElement('div');
+        newMessage.textContent = `Server: ${event.data}`;
+        messagesDiv.appendChild(newMessage);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight; // Auto-scroll to the bottom
+    };
+
+    connection.onerror = (error) => {
+        console.error('WebSocket Error:', error);
+    };
+
+    connection.onclose = () => {
+        console.log('WebSocket connection closed');
+        isConnected = false; // Update connection status
+    };
+
+    document.getElementById('sendButton').addEventListener('click', () => {
+        const messageInput = document.getElementById('messageInput');
+        const message = messageInput.value;
+        if (message) {
+            if (isConnected) {
+                connection.send(message);
+                const messagesDiv = document.getElementById('messages');
+                const newMessage = document.createElement('div');
+                newMessage.textContent = `You: ${message}`;
+                messagesDiv.appendChild(newMessage);
+                messagesDiv.scrollTop = messagesDiv.scrollHeight; // Auto-scroll to the bottom
+                messageInput.value = '';
+            } else {
+                alert('WebSocket is not connected.');
+            }
+        }
+    });
+
+    // Optional: Handle pressing Enter to send message
+    document.getElementById('messageInput').addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            document.getElementById('sendButton').click();
+        }
+    });
+</script>
+</body>
+</html>
