@@ -1,0 +1,12 @@
+Channel 是 Netty 用于抽象网络连接的接口，代表一个打开的连接，它可以用于读取、写入数据。Channel 提供了基本的 I/O 操作，例如绑定、连接、读取和写入。
+
+相关 API:
+
+	•	Channel.read()：读取数据。
+	•	Channel.write()：向通道中写入数据。
+	•	Channel.close()：关闭通道。
+
+代码示例：
+    Channel channel = ...;
+    channel.writeAndFlush("Hello, Netty!");  // 写数据
+    channel.close();  // 关闭通道

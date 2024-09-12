@@ -1,0 +1,12 @@
+6. ChannelOption
+
+ChannelOption 是用于配置 Channel 属性的静态常量类。例如，可以设置连接超时、发送缓冲区大小等。
+
+常用选项：
+
+	•	ChannelOption.SO_KEEPALIVE：是否启用 TCP 保活机制。
+	•	ChannelOption.CONNECT_TIMEOUT_MILLIS：设置连接超时。
+
+代码示例：
+    bootstrap.option(ChannelOption.SO_KEEPALIVE, true);  // 设置 TCP 保活
+    bootstrap.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5000);  // 设置连接超时时间

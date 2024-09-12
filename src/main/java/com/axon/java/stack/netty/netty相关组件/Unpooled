@@ -1,0 +1,12 @@
+11. Unpooled
+
+Unpooled 是用于创建未池化的 ByteBuf 实例的工具类。ByteBuf 是 Netty 用来处理字节缓冲区的核心类。
+
+相关 API:
+
+	•	Unpooled.buffer()：创建一个新的 ByteBuf。
+	•	Unpooled.wrappedBuffer(byte[] array)：将字节数组包装为 ByteBuf。
+
+代码示例：
+    ByteBuf buf = Unpooled.buffer(256);
+    buf.writeBytes("Hello, Netty!".getBytes());

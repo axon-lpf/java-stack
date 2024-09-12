@@ -1,0 +1,18 @@
+7. ChannelOutboundHandler
+
+ChannelOutboundHandler 是处理出站 I/O 操作的接口，例如写数据、刷新操作。
+
+相关 API:
+
+	•	void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise)：当有数据需要写出时触发。
+
+代码示例：
+    public class MyOutboundHandler implements ChannelOutboundHandler {
+        @Override
+        public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) {
+            System.out.println("Outbound message: " + msg);
+            ctx.write(msg, promise);
+        }
+
+        // 需要实现 ChannelOutboundHandler 的所有方法
+    }

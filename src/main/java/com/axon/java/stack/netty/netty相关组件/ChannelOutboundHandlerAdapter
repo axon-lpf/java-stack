@@ -1,0 +1,12 @@
+8. ChannelOutboundHandlerAdapter
+
+ChannelOutboundHandlerAdapter 是 ChannelOutboundHandler 的适配器类。它提供了默认的空实现，允许子类只需重写出站相关的方法。
+
+代码示例：
+    public class MyOutboundHandlerAdapter extends ChannelOutboundHandlerAdapter {
+        @Override
+        public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) {
+            System.out.println("Outbound data: " + msg);
+            ctx.writeAndFlush(msg, promise);
+        }
+    }

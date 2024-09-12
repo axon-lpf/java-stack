@@ -1,0 +1,8 @@
+关系说明：
+
+	1.	Channel：是连接的抽象，每个连接都会有一个 Channel。
+	2.	ChannelPipeline：是事件处理的管道，存放所有处理事件的 ChannelHandler。
+	3.	ChannelHandler：是具体的处理器，可以处理入站和出站事件。
+	4.	ChannelHandlerContext：是 ChannelHandler 和 ChannelPipeline 之间的上下文，提供操作通道和事件传递的功能。
+	5.	EventLoop：是处理 Channel 上所有 I/O 操作的事件循环。
+	6.	Unpooled：用于创建和操作 ByteBuf，处理数据的缓冲区。

@@ -1,0 +1,17 @@
+3. ChannelHandlerContext
+
+ChannelHandlerContext 是 ChannelHandler 和 ChannelPipeline 之间的桥梁。通过 ChannelHandlerContext，ChannelHandler 可以访问到 Channel 和 Pipeline，并可以写入数据、触发事件等。
+
+相关 API:
+
+	•	Channel channel()：获取关联的 Channel。
+	•	void write(Object msg)：写入数据。
+	•	void fireChannelRead(Object msg)：将消息传递给下一个 ChannelHandler。
+
+代码示例：
+    public class MyHandler extends ChannelInboundHandlerAdapter {
+        @Override
+        public void channelRead(ChannelHandlerContext ctx, Object msg) {
+            ctx.writeAndFlush("Processed message: " + msg);  // 写回处理后的数据
+        }
+    }

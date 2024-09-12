@@ -1,0 +1,13 @@
+10. ChannelPipeline
+
+ChannelPipeline 是 Channel 上处理事件的处理器链，所有的 ChannelHandler 都会被添加到 ChannelPipeline 中，以处理入站和出站事件。
+
+相关 API:
+
+	•	void addLast(ChannelHandler handler)：在 Pipeline 的尾部添加处理器。
+	•	ChannelHandlerContext context(ChannelHandler handler)：获取指定处理器的上下文。
+
+代码示例：
+    ChannelPipeline pipeline = channel.pipeline();
+    pipeline.addLast(new MyInboundHandler());
+    pipeline.addLast(new MyOutboundHandler());

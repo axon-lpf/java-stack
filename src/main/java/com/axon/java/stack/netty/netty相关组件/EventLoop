@@ -1,0 +1,14 @@
+9. EventLoop
+
+EventLoop 是 Netty 的事件循环，它负责处理 Channel 上的所有 I/O 操作。每个 Channel 会绑定到一个 EventLoop。
+
+相关 API:
+
+	•	void execute(Runnable task)：提交一个任务到事件循环。
+	•	void shutdownGracefully()：优雅地关闭事件循环。
+
+代码示例：
+    EventLoop eventLoop = channel.eventLoop();
+    eventLoop.execute(() -> {
+        System.out.println("This task is executed in the EventLoop.");
+    });

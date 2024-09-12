@@ -1,0 +1,17 @@
+2. ChannelHandler
+
+ChannelHandler 是一个处理 I/O 事件的接口。你可以通过实现该接口来自定义处理数据的方式。ChannelHandler 的实例通常会被添加到 ChannelPipeline 中。
+
+相关 API:
+
+	•	void handlerAdded(ChannelHandlerContext ctx)：当 ChannelHandler 被添加到 ChannelPipeline 时触发。
+	•	void handlerRemoved(ChannelHandlerContext ctx)：当 ChannelHandler 从 ChannelPipeline 中移除时触发。
+
+代码示例：
+    public class MyChannelHandler extends ChannelInboundHandlerAdapter {
+        @Override
+        public void channelRead(ChannelHandlerContext ctx, Object msg) {
+            System.out.println("Message received: " + msg);
+            ctx.fireChannelRead(msg);  // 继续传递事件
+        }
+    }

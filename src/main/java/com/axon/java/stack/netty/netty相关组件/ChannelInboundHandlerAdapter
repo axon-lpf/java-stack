@@ -1,0 +1,11 @@
+5. ChannelInboundHandlerAdapter
+
+ChannelInboundHandlerAdapter 是 ChannelInboundHandler 的简单实现。它提供了一些空方法，允许子类只需重写需要的方法。
+
+代码示例：
+    public class MyInboundHandlerAdapter extends ChannelInboundHandlerAdapter {
+        @Override
+        public void channelRead(ChannelHandlerContext ctx, Object msg) {
+            System.out.println("Message received: " + msg);
+        }
+    }

@@ -1,0 +1,23 @@
+4. ChannelInboundHandler
+
+ChannelInboundHandler 是处理入站 I/O 事件的接口。例如，数据读取、连接建立等事件。
+
+相关 API:
+
+	•	void channelRead(ChannelHandlerContext ctx, Object msg)：读取数据时触发。
+	•	void channelActive(ChannelHandlerContext ctx)：当通道激活时（连接建立时）触发。
+
+代码示例：
+    public class MyInboundHandler implements ChannelInboundHandler {
+        @Override
+        public void channelRead(ChannelHandlerContext ctx, Object msg) {
+            System.out.println("Inbound message: " + msg);
+        }
+
+        @Override
+        public void channelActive(ChannelHandlerContext ctx) {
+            System.out.println("Channel is active");
+        }
+
+        // 需要实现 ChannelInboundHandler 的所有方法
+    }
