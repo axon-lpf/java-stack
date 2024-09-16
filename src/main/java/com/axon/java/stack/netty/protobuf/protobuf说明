@@ -3,3 +3,54 @@ https://protobuf.dev/overview/
 
 为什么使用protobuf呢？
     因为netty自带的协议只能使用java语言,而不能使用其它语言。
+
+
+mac 环境下的安装
+    在 macOS 环境下，你可以按照以下步骤解压并安装 protoc（Protocol Buffers 编译器）。
+
+    1. 下载 protoc 压缩包
+
+    	•	前往官方 Protocol Buffers GitHub releases 页面下载最新版本的 protoc：
+    Protobuf Releases
+    	•	找到适合 macOS 的预编译二进制文件，例如 protoc-<version>-osx-x86_64.zip。
+
+    2. 解压缩 protoc 压缩包
+
+    步骤：
+
+    	1.	下载后找到压缩包：
+    默认情况下，下载的文件通常会存放在 ~/Downloads 文件夹中。
+    	2.	使用终端解压：
+    打开终端，并导航到你下载的目录（如 Downloads）：
+        cd ~/Downloads
+        3.	使用 unzip 命令解压缩：
+        使用以下命令解压 protoc 压缩包（假设你下载的文件名是 protoc-<version>-osx-x86_64.zip）：
+        unzip protoc-<version>-osx-x86_64.zip
+        这将会在当前目录下生成一个名为 bin 的目录，里面包含 protoc 可执行文件，和一个 include 目录，包含相关的头文件。
+        3. 安装 protoc
+            1.	移动 protoc 到全局路径（如 /usr/local/bin）：
+                为了使 protoc 命令在全局可用，可以将它移动到系统的全局 bin 目录：
+                sudo mv bin/protoc /usr/local/bin/
+            2.	将 include 目录移动到 /usr/local/include：
+                sudo mv include/* /usr/local/include/
+
+        4. 验证安装
+        安装完成后，运行以下命令来验证 protoc 是否安装成功：
+            protoc --version
+        5. 添加到 PATH（可选）
+        如果你不想将 protoc 移动到 /usr/local/bin，可以将它解压缩到其他目录，并将该目录添加到 PATH 中。
+            export PATH=$PATH:/path/to/protoc/bin
+            然后将这行命令添加到 ~/.zshrc 或 ~/.bash_profile 文件中，这样每次打开终端时都会加载。
+
+
+
+使用命令：
+    protoc --java_out=./ Student.proto  命令行在哪个目录下打开，就生成在哪个目录。
+
+
+pom 中引入包
+            <dependency>
+                <groupId>com.google.protobuf</groupId>
+                <artifactId>protobuf-java</artifactId>
+                <version>3.24.0</version>
+            </dependency>

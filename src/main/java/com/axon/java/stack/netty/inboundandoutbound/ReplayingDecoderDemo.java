@@ -6,7 +6,7 @@ import io.netty.handler.codec.ReplayingDecoder;
 
 import java.util.List;
 
-public class ReplayingDecoderDemo extends ReplayingDecoder <Void> {
+public class ReplayingDecoderDemo extends ReplayingDecoder<Void> {
 
 
     @Override

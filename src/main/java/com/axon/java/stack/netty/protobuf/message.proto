@@ -1,0 +1,34 @@
+syntax = "proto3";
+option optimize_for = SPEED;  //加快解析
+option java_package = 'com.axon.java.stack.netty.protobuf';
+option  java_outer_classname = "MessageDataInfo";
+
+// 可以使用message去管理其它的message
+message  MessageData{
+
+  enum  DataType{
+    StudentType = 0;
+    WorkerType = 1;
+  }
+
+  //使用dataType 用来传递是那一个枚举类型
+  DataType data_type = 1;
+
+  //表示每次枚举类型最多只能出现其中一个
+  oneof dataBody{
+
+    Student student = 2;
+    Worker  worker = 3;
+  }
+
+}
+message  Student{
+
+  int32  id = 1;
+  string name = 2;
+}
+
+message  Worker{
+  string  name = 1;
+  int32  age = 2;
+}
