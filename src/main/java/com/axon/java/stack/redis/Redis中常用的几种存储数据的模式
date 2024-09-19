@@ -1,0 +1,108 @@
+Redis 中常用的几种存储数据的模式
+
+1. 字符串类型（String）
+
+Redis 的字符串类型是最基本的存储类型，每个键都对应一个字符串值，值可以是文本、数字等。
+
+示例：
+    Jedis jedis = new Jedis("localhost");
+    jedis.set("key", "value");   // 设置字符串类型的键值对
+    System.out.println(jedis.get("key"));   // 获取键为 key 的值
+
+
+2. 哈希类型（Hash）
+
+哈希类型可以存储键值对集合，适合存储对象。
+
+示例：
+    Jedis jedis = new Jedis("localhost");
+    jedis.hset("user:1", "name", "Alice");
+    jedis.hset("user:1", "age", "25");
+    System.out.println(jedis.hget("user:1", "name"));   // 输出：Alice
+    System.out.println(jedis.hget("user:1", "age"));    // 输出：25
+
+
+ 3. 列表类型（List）
+
+ 列表类型是一个链表结构，可以存储多个字符串元素，支持从头部或尾部插入元素。
+
+ 示例：
+    Jedis jedis = new Jedis("localhost");
+    jedis.lpush("tasks", "task1");
+    jedis.lpush("tasks", "task2");
+    System.out.println(jedis.lrange("tasks", 0, -1));  // 输出：["task2", "task1"]
+
+
+
+ 4. 集合类型（Set）
+ 集合类型是一个无序集合，集合中的元素没有重复。
+
+ 示例：
+    Jedis jedis = new Jedis("localhost");
+    jedis.sadd("tags", "java");
+    jedis.sadd("tags", "redis");
+    jedis.sadd("tags", "mysql");
+    System.out.println(jedis.smembers("tags"));   // 输出：一个无序集合，如 [java, redis, mysql]
+
+
+5. 有序集合类型（Sorted Set / ZSet）
+
+有序集合类似于集合，但是每个元素都会关联一个分数（score），Redis 根据分数来排序元素。
+
+示例：
+    Jedis jedis = new Jedis("localhost");
+    jedis.zadd("rankings", 100, "player1");
+    jedis.zadd("rankings", 200, "player2");
+    System.out.println(jedis.zrange("rankings", 0, -1));  // 输出：["player1", "player2"]
+
+6. 位图（Bitmaps）
+
+位图是一种特殊的字符串类型，用于对数据进行按位操作。
+
+示例：
+    Jedis jedis = new Jedis("localhost");
+    jedis.setbit("user:online", 0, true);  // 设置第一个用户在线状态
+    jedis.setbit("user:online", 1, false); // 设置第二个用户不在线
+    System.out.println(jedis.getbit("user:online", 0));  // 输出：true
+
+7. HyperLogLog
+
+HyperLogLog 是一种用于基数统计的算法，适用于统计不重复的元素的个数（例如 UV 统计）。
+
+示例：
+    Jedis jedis = new Jedis("localhost");
+    jedis.pfadd("hll", "user1", "user2", "user3");
+    System.out.println(jedis.pfcount("hll"));  // 输出：3
+
+8. 地理空间类型（Geo）
+
+Geo 类型是用于存储地理位置信息的结构，并且可以进行距离计算等操作。
+
+示例：
+    Jedis jedis = new Jedis("localhost");
+    jedis.geoadd("cities", 116.40, 39.90, "Beijing");  // 添加坐标
+    jedis.geoadd("cities", 121.47, 31.23, "Shanghai");
+    System.out.println(jedis.geodist("cities", "Beijing", "Shanghai"));  // 计算两地距离
+
+
+9. 发布/订阅（Pub/Sub）
+
+Redis 支持消息的发布/订阅模式，适用于消息广播系统。
+
+发布者：
+    Jedis jedis = new Jedis("localhost");
+    jedis.publish("channel", "Hello Redis");
+
+订阅者：
+    Jedis jedis = new Jedis("localhost");
+    jedis.subscribe(new JedisPubSub() {
+        @Override
+        public void onMessage(String channel, String message) {
+            System.out.println("收到消息：" + message);
+        }
+    }, "channel");
+
+
+总结
+
+Redis 支持多种数据结构，包括字符串、哈希、列表、集合、有序集合、位图、HyperLogLog、地理空间、发布/订阅等。根据使用场景不同，可以选择合适的存储模式。
