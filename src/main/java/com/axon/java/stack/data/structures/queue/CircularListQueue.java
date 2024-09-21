@@ -3,13 +3,12 @@ package com.axon.java.stack.data.structures.queue;
 import java.util.Scanner;
 
 /**
- * 添加 arraryListQueue ,该队列是一个单向队列， 不能够复用
- *
+ * 添加 CircularListQueue  该队列是一个环形队列， 可以达到复用的目的
  */
-public class ArraryListQueue {
+public class CircularListQueue {
 
     public static void main(String[] args) {
-        ArraryListQueue queue = new ArraryListQueue(3);
+        CircularListQueue queue = new CircularListQueue(5);
         Scanner cin = new Scanner(System.in);
         boolean loop = true;
         while (loop) {
@@ -44,21 +43,27 @@ public class ArraryListQueue {
     }
 
     /**
-     *  构造函数
+     * 构造函数
+     *
      * @param maxSize
      */
-    public ArraryListQueue(int maxSize) {
-        this.maxSize = maxSize;
+    public CircularListQueue(int maxSize) {
+        this.maxQueueSize = maxSize;
         queueList = new int[maxSize];
     }
 
-    // 队列的头
-    private int front = -1;
+    // 队列的头设置为0
+    private int front = 0;
 
-    // 队列的下标， 对应添加到什么位置了
-    private int rear = -1;
-    //队列的最大值大小
-    private int maxSize;
+    // 队列的增长值为0
+    private int rear = 0;
+    //设置队列的最大长度
+    private int maxQueueSize;
+
+    //队列的总长度的公式
+
+    // (0+rear)+(maxSize-front)= 队列的总长度
+    // 即 队列实际有效的长度=rear-front+maxSize%maxQueueSize
 
 
     private int[] queueList;
@@ -67,29 +72,38 @@ public class ArraryListQueue {
         if (this.isFull()) {
             throw new RuntimeException("队列已经满了");
         }
-        this.rear++;
         queueList[rear] = n;
+
+        this.rear = (this.rear + 1) % maxQueueSize;
     }
 
     public int getQueue() {
         if (this.isEmpty()) {
             throw new RuntimeException("队列已经是空的了");
         }
-        this.front++;
-
-        return queueList[front];
+        int result = queueList[front];
+        this.front = (this.front + 1) % maxQueueSize;
+        return result;
     }
 
     public void showQueue() {
-
+        if (queueList.length == 0) {
+            System.out.println("当前的队列值为空");
+            return;
+        }
         for (int i = 0; i < queueList.length; i++) {
             System.out.println("queueList[" + i + "]的值是" + queueList[i]);
         }
     }
 
 
+    /**
+     * 判断队列满的条件
+     *
+     * @return
+     */
     public boolean isFull() {
-        return maxSize == this.rear + 1;
+        return (this.rear + 1) % maxQueueSize == this.front;
     }
 
     private boolean isEmpty() {
