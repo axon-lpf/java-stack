@@ -4,6 +4,8 @@ import java.util.Scanner;
 
 /**
  * 添加 CircularListQueue  该队列是一个环形队列， 可以达到复用的目的
+ * <p>
+ * 这块的理解可以参考大话数据结构  P112-P116
  */
 public class CircularListQueue {
 
@@ -63,7 +65,8 @@ public class CircularListQueue {
     //队列的总长度的公式
 
     // (0+rear)+(maxSize-front)= 队列的总长度
-    // 即 队列实际有效的长度=rear-front+maxSize%maxQueueSize
+
+    // 即 队列实际有效的长度=rear-front+maxSize%maxQueueSize   实际就是环形的队列
 
 
     private int[] queueList;
@@ -73,7 +76,7 @@ public class CircularListQueue {
             throw new RuntimeException("队列已经满了");
         }
         queueList[rear] = n;
-
+        // 加1，然后取模获取最新的rear值
         this.rear = (this.rear + 1) % maxQueueSize;
     }
 
@@ -82,17 +85,24 @@ public class CircularListQueue {
             throw new RuntimeException("队列已经是空的了");
         }
         int result = queueList[front];
+        queueList[front] = 0;
+        // 这里front+1% maxQueueSize  获取最新的队列头
         this.front = (this.front + 1) % maxQueueSize;
         return result;
     }
 
     public void showQueue() {
-        if (queueList.length == 0) {
+        if (this.isEmpty()) {
             System.out.println("当前的队列值为空");
             return;
         }
-        for (int i = 0; i < queueList.length; i++) {
-            System.out.println("queueList[" + i + "]的值是" + queueList[i]);
+
+        //获取有效数据
+        int size = ((0 + this.rear) + (this.maxQueueSize - this.front)) % maxQueueSize;
+
+        //这里是打印有效队列
+        for (int i = front; i < this.front + size; i++) {
+            System.out.println("queueList[" + i + "]的值是" + queueList[i % maxQueueSize]);
         }
     }
 
@@ -103,6 +113,7 @@ public class CircularListQueue {
      * @return
      */
     public boolean isFull() {
+        //这里是取模，获得容器的总量范围内， rear+1,是为了 预留一个空间，避免与front重合
         return (this.rear + 1) % maxQueueSize == this.front;
     }
 
