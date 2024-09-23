@@ -64,8 +64,31 @@ class SingleLinkList {
             // 为下一个节点赋值
             temp.setNext(currentNode);
         }
+    }
+
+
+    /**
+     * 移除节点
+     *
+     * @param currentNode
+     */
+    public void removeHeroNode(HeroNode currentNode) {
+        HeroNode temp = heroHeadNode;
+
+        while (true) {
+            if (currentNode.getNo() < 0) {
+                throw new RuntimeException("输入的节点信息编号异常");
+            }
+            if (temp.getNext().getNo() == currentNode.getNo()) {
+                break;
+            }
+            temp = temp.getNext();
+        }
+        //将当前节点设置为
+        temp.setNext(temp.getNext().getNext());
 
     }
+
 
     // 展示链表中的数据
     public void showList() {
