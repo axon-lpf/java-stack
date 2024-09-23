@@ -1,35 +1,25 @@
 package com.axon.java.stack.data.structures.linklist;
 
-import cn.hutool.json.JSON;
-
-
-/**
- * 1.求单链表中有效节点的个数
- * 2.查找单链表中倒数第k个节点
- * 3.单链表进行反转
- * 4.从尾到头打印单链表
- * 5.合并两个有序的单链表，合并之后链表依然有序
- */
-public class SingleLinkListDemo {
+public class DoubleLinkListDemo {
 
     public static void main(String[] args) {
 
-        SingleLinkList list = new SingleLinkList();
-        HeroNode heroNode1 = new HeroNode(30, "林冲");
-        HeroNode heroNode2 = new HeroNode(10, "鲁智深");
+        DoubleLinkList list = new DoubleLinkList();
+        DoubleHeroNode heroNode1 = new DoubleHeroNode(30, "林冲");
+        DoubleHeroNode heroNode2 = new DoubleHeroNode(10, "鲁智深");
 
-        HeroNode heroNode3 = new HeroNode(50, "无用");
+        DoubleHeroNode heroNode3 = new DoubleHeroNode(50, "无用");
 
-        HeroNode heroNode4 = new HeroNode(60, "武松");
+        DoubleHeroNode heroNode4 = new DoubleHeroNode(60, "武松");
 
-        HeroNode heroNode5= new HeroNode(20, "松江");
+        DoubleHeroNode heroNode5= new DoubleHeroNode(20, "松江");
 
 
-        list.addHeroNodeByOrder(heroNode1);
-        list.addHeroNodeByOrder(heroNode2);
-        list.addHeroNodeByOrder(heroNode3);
-        list.addHeroNodeByOrder(heroNode4);
-        list.addHeroNodeByOrder(heroNode5);
+        list.addHeroNode(heroNode1);
+        list.addHeroNode(heroNode2);
+        list.addHeroNode(heroNode3);
+        list.addHeroNode(heroNode4);
+        list.addHeroNode(heroNode5);
 
         System.out.println("遍历原始数据。。。。。。。");
         list.showList();
@@ -40,7 +30,7 @@ public class SingleLinkListDemo {
         System.out.println("删除后的节点列表。。。。。。。");
         list.showList();
 
-        list.updateHero(new HeroNode(50,"智多星"));
+        list.updateHero(new DoubleHeroNode(50,"智多星"));
 
         System.out.println("修改后的节点列表");
 
@@ -52,24 +42,26 @@ public class SingleLinkListDemo {
 }
 
 
-class SingleLinkList {
+class DoubleLinkList {
 
     //这是头节点
-    HeroNode heroHeadNode = new HeroNode(0, null);
+    DoubleHeroNode heroHeadNode = new DoubleHeroNode(0, null);
 
     /**
      * 添加英雄节点
      *
      * @param currentNode
      */
-    public void addHeroNode(HeroNode currentNode) {
+    public void addHeroNode(DoubleHeroNode currentNode) {
         //获取一个临时节点
-        HeroNode temp = heroHeadNode;
+        DoubleHeroNode temp = heroHeadNode;
         while (temp.getNext() != null) {
             temp = temp.getNext();
         }
         // 为下一个节点赋值
         temp.setNext(currentNode);
+        //设置前节点
+        currentNode.setPre(temp);
     }
 
     /**
@@ -77,9 +69,9 @@ class SingleLinkList {
      *
      * @param currentNode
      */
-    public void addHeroNodeByOrder(HeroNode currentNode) {
+    public void addHeroNodeByOrder(DoubleHeroNode currentNode) {
         //获取一个临时节点
-        HeroNode temp = heroHeadNode;
+        DoubleHeroNode temp = heroHeadNode;
         boolean flag = false;
         while (true) {
             if (temp.getNext() == null) {
@@ -95,8 +87,12 @@ class SingleLinkList {
             System.out.println("编号 " + currentNode.getNo() + " 已经存在，无法添加");
         } else {
             currentNode.setNext(temp.getNext());
+            //当前节点的上一节点
+            currentNode.setPre(temp);
+
             // 为下一个节点赋值
             temp.setNext(currentNode);
+
         }
     }
 
@@ -111,7 +107,7 @@ class SingleLinkList {
             System.out.println("编号异常， 无法删除");
             return;
         }
-        HeroNode temp = heroHeadNode;
+        DoubleHeroNode temp = heroHeadNode;
 
         boolean flag = false;
 
@@ -129,6 +125,7 @@ class SingleLinkList {
         if (flag) {
             //将当前节点设置为
             temp.setNext(temp.getNext().getNext());
+            temp.getNext().getNext().setPre(temp);
         } else {
             System.out.println("未找到对应的节点");
         }
@@ -138,8 +135,8 @@ class SingleLinkList {
      *  更新英雄
      * @param heroNode
      */
-    public  void updateHero(HeroNode heroNode) {
-        HeroNode tempNode = heroHeadNode;
+    public  void updateHero(DoubleHeroNode heroNode) {
+        DoubleHeroNode tempNode = heroHeadNode;
         if (tempNode.getNext() == null) {
             System.out.println("当前链表的节点为空，无法进行修改");
             return;
@@ -173,7 +170,7 @@ class SingleLinkList {
         }
 
         // 因为头节点不能动，因此需要一个临时变量来遍历
-        HeroNode temp = heroHeadNode.getNext();
+        DoubleHeroNode temp = heroHeadNode.getNext();
         while (temp != null) {
             // 输出节点的信息
             System.out.println(temp);
@@ -184,13 +181,13 @@ class SingleLinkList {
 }
 
 
-class HeroNode {
+class DoubleHeroNode {
 
-    public HeroNode getNext() {
+    public DoubleHeroNode getNext() {
         return next;
     }
 
-    public void setNext(HeroNode next) {
+    public void setNext(DoubleHeroNode next) {
         this.next = next;
     }
 
@@ -214,17 +211,27 @@ class HeroNode {
 
     private String name;
 
-    private HeroNode next;
+    private DoubleHeroNode next;
+
+    public DoubleHeroNode getPre() {
+        return pre;
+    }
+
+    public void setPre(DoubleHeroNode pre) {
+        this.pre = pre;
+    }
+
+    private DoubleHeroNode pre;
 
 
-    public HeroNode(int no, String name) {
+    public DoubleHeroNode(int no, String name) {
         this.no = no;
         this.name = name;
     }
 
     @Override
     public String toString() {
-        return "HeroNode{" +
+        return "DoubleHeroNode{" +
                 "no=" + no +
                 ", name='" + name + '\'' +
                 '}';
