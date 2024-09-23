@@ -42,7 +42,7 @@ public class MeteDataSpaceOverflowTest {
                 Class<?> dynamicClass = generateClass(className);
                 classes.add(dynamicClass);
 
-                // 打印生成的类名
+                //打印生成的类名
                 System.out.println("Generated class: " + className);
             }
         } catch (Throwable e) {

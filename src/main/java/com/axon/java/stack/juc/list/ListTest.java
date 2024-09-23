@@ -26,7 +26,7 @@ import java.util.concurrent.CountDownLatch;
  *
  * HashMap:
  *       // Map<String, String> result = new HashMap<>(); //  hashMap 和ConcurrentHashMap 的区别在哪里？
- *       //  Map<String, String> result = new ConcurrentHashMap<>();
+ *       // Map<String, String> result = new ConcurrentHashMap<>();
  *
  * <p>
  * <p>

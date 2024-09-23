@@ -1,0 +1,92 @@
+在 RabbitMQ 中，消息确认机制用于确保消息从生产者到消费者的过程中能够被可靠地传递并且不会丢失。它包括生产者确认和消费者确认两个方面。下面详细介绍 RabbitMQ 如何进行消息送达的确认。
+
+1. 生产者确认（Publisher Confirms）
+
+生产者确认是用来保证消息成功发送到 RabbitMQ 服务器的机制。生产者发送一条消息后，RabbitMQ 可以通过异步或同步的方式通知生产者，消息是否成功到达交换机和队列。
+
+生产者确认的两种机制：
+
+	1.	Confirm模式：生产者在发送消息时可以开启 Confirm 模式。一旦消息到达 RabbitMQ 服务器并被正确处理，RabbitMQ 会发送 ack（acknowledgement）确认给生产者。否则，RabbitMQ 会发送 nack（negative acknowledgement），表明消息没有处理成功。
+	•	步骤：
+	1.	生产者发送消息到交换机。
+	2.	如果消息成功到达，RabbitMQ 会返回 ack，表明消息成功处理。
+	3.	如果消息丢失或处理失败，RabbitMQ 会返回 nack，生产者可以根据情况决定是否重发消息。
+	•	代码示例：
+	// 启用 Confirm 模式
+    channel.confirmSelect();
+
+    // 发送消息
+    channel.basicPublish(exchange, routingKey, null, message.getBytes());
+
+    // 等待确认
+    if (channel.waitForConfirms()) {
+        System.out.println("消息发送成功");
+    } else {
+        System.out.println("消息发送失败");
+    }
+
+2.	Return模式：当消息路由到交换机后，由于路由键匹配不到队列，可能会导致消息丢失。通过 Return 模式，可以确保消息被返回给生产者，从而防止消息丢失。
+	•	生产者通过 basicPublish 设置消息的 mandatory 标志。如果消息无法路由到队列，RabbitMQ 将触发 ReturnListener，通知生产者该消息未被正确路由。
+
+    Confirm 和 Return 模式的结合：
+    可以结合使用 Confirm 和 Return 模式确保消息从生产者到 RabbitMQ 服务器的可靠性。Confirm 保证消息到达 RabbitMQ，Return 保证消息成功路由到队列。
+
+
+2. 消费者确认（Consumer Acknowledgements）
+
+消费者确认是为了保证 RabbitMQ 消息从队列被消费者消费后，才会将消息从队列中删除，确保消息不会在消费失败时丢失。RabbitMQ 支持两种消费者确认模式：自动确认和手动确认。
+
+自动确认（Auto Acknowledgement）
+
+	•	消费者无需手动确认，RabbitMQ 发送消息给消费者后，立即认为消息已被成功处理，并将消息从队列中删除。这种模式效率较高，但存在风险：如果消费者在处理消息时崩溃，消息将会丢失，因为它已经从队列中移除了。
+
+手动确认（Manual Acknowledgement）
+
+	•	手动确认模式下，消费者在处理完消息后，显式调用 basicAck() 方法来确认消息已被成功处理。只有在消费者发出确认之后，RabbitMQ 才会将消息从队列中删除。如果消费者没有确认，消息将保持在队列中，RabbitMQ 可以重新发送消息给其他消费者。
+	•	手动确认代码示例：
+        // 定义消费者，启用手动确认
+        channel.basicConsume(queueName, false, new DefaultConsumer(channel) {
+            @Override
+            public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
+                String message = new String(body, "UTF-8");
+                try {
+                    // 处理消息
+                    System.out.println("收到消息: " + message);
+                    // 手动确认消息
+                    channel.basicAck(envelope.getDeliveryTag(), false);
+                } catch (Exception e) {
+                    // 消费者处理失败时，可以不确认，让消息重新被消费
+                    channel.basicNack(envelope.getDeliveryTag(), false, true);
+                }
+            }
+        });
+
+消息重回队列：
+
+	•	如果消费者在处理消息时发生错误，未能成功处理该消息，RabbitMQ 允许消费者发送 basicNack() 或 basicReject()，使得消息重新回到队列中，等待其他消费者重新消费。
+
+
+3. 事务机制
+
+除了生产者和消费者确认机制外，RabbitMQ 还提供了事务支持。生产者可以通过开启事务机制，在消息发送过程中确保消息的原子性，但性能较差。因此，事务模式通常不如 Confirm 模式常用。
+
+事务模式的使用：
+
+	•	生产者在发送消息前开启事务，在消息成功发送后提交事务；如果发送失败则回滚。
+	•	代码示例：
+	    try {
+            channel.txSelect();  // 开启事务
+            channel.basicPublish(exchange, routingKey, null, message.getBytes());
+            channel.txCommit();  // 提交事务
+        } catch (IOException e) {
+            channel.txRollback();  // 发送失败回滚事务
+        }
+
+
+总结：
+
+	•	生产者确认机制（Publisher Confirms）用于保证消息从生产者成功发送到 RabbitMQ 服务器。
+	•	消费者确认机制（Consumer Acknowledgements）用于确保消费者成功处理消息后才将其从队列中移除，避免消息丢失。
+	•	事务机制 虽然保证消息的原子性，但由于性能问题，通常使用生产者确认机制来替代。
+
+RabbitMQ 的这些消息确认机制确保了消息的可靠传输，避免了消息丢失或重复处理。

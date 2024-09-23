@@ -1,0 +1,141 @@
+在 Spring 中，事务的传播机制（Transaction Propagation）控制了事务在方法调用时的传播行为。Spring 提供了七种事务传播行为，每种行为适用于不同的场景。通过实际案例可以帮助开发者更好地理解这些传播机制。
+
+1. PROPAGATION_REQUIRED（默认传播机制）
+
+定义：如果当前存在事务，则加入该事务；如果没有事务，则新建一个事务。
+适用场景：绝大多数场景下适用，例如当多个服务需要共享同一个事务时。
+
+案例：
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void methodA() {
+        // 执行数据库操作
+        methodB();  // methodB() 会加入 methodA() 的事务
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void methodB() {
+        // 执行数据库操作
+    }
+
+开发者理解：methodB() 将加入 methodA() 的事务，因此如果 methodA() 回滚，methodB() 也会回滚。如果没有外部事务，则 methodB() 自行开启事务。
+
+
+2. PROPAGATION_SUPPORTS
+
+定义：如果当前有事务，就加入事务；如果没有事务，则以非事务方式执行。
+适用场景：当某些方法不一定需要事务，但希望在有事务时能够使用事务。
+
+案例：
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void methodA() {
+        methodB();  // methodB() 将加入 methodA() 的事务
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public void methodB() {
+        // 在有事务时参与事务，没有事务时则非事务执行
+    }
+
+开发者理解：如果 methodA() 开启了事务，methodB() 也会加入事务；否则 methodB() 不会开启事务，执行操作不受事务控制。
+
+
+3. PROPAGATION_MANDATORY
+
+定义：必须在现有事务中执行，如果当前没有事务，则抛出异常。
+适用场景：需要确保该方法必须运行在事务中。
+
+案例：
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void methodA() {
+        methodB();  // methodB() 正常执行
+    }
+
+    @Transactional(propagation = Propagation.MANDATORY)
+    public void methodB() {
+        // 必须在事务中执行
+    }
+开发者理解：如果没有外部事务时调用 methodB()，将抛出异常，确保该方法不能在非事务环境中运行。
+
+
+4. PROPAGATION_REQUIRES_NEW
+
+定义：新建一个事务，如果当前有事务，暂停当前事务。
+适用场景：需要独立事务的场景，比如日志操作或外部系统的操作。
+
+案例：
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void methodA() {
+        // 事务1
+        methodB();  // 新建一个事务（事务2）
+        // 事务1恢复
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void methodB() {
+        // 独立的新事务（事务2），不受 methodA 的事务影响
+    }
+
+开发者理解：methodB() 会开启一个新的事务，不会受 methodA() 事务的回滚或提交影响。即使 methodA() 回滚，methodB() 的事务也会独立提交或回滚。
+
+
+
+5. PROPAGATION_NOT_SUPPORTED
+
+定义：以非事务方式执行操作，如果当前有事务，挂起该事务。
+适用场景：某些不需要事务的操作，或者为了避免长时间占用数据库资源。
+
+案例：
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void methodA() {
+        methodB();  // methodB() 非事务执行，methodA() 的事务被挂起
+    }
+
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
+    public void methodB() {
+        // 以非事务方式执行
+    }
+
+  开发者理解：methodB() 不会使用 methodA() 的事务，即便 methodA() 有事务，methodB() 也会非事务执行。如果 methodB() 执行失败，不会导致 methodA() 的回滚。
+
+6. PROPAGATION_NEVER
+
+定义：以非事务方式执行操作，如果当前存在事务，则抛出异常。
+适用场景：强制要求某个方法不能运行在事务中。
+
+案例：
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void methodA() {
+        methodB();  // 会抛出异常
+    }
+
+    @Transactional(propagation = Propagation.NEVER)
+    public void methodB() {
+        // 必须在非事务环境下执行
+    }
+
+开发者理解：methodB() 强制要求非事务执行，如果 methodA() 已经开启事务，调用 methodB() 将抛出异常。
+
+
+
+7. PROPAGATION_NESTED
+
+定义：如果当前有事务，则在嵌套事务内执行。如果没有事务，则新建事务。
+适用场景：需要在一个大事务内处理多个部分，并希望对某部分单独回滚。
+
+案例：
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void methodA() {
+        try {
+            methodB();  // 嵌套事务
+        } catch (Exception e) {
+            // methodA() 回滚时，methodB() 的部分可以独立回滚
+        }
+    }
+
+    @Transactional(propagation = Propagation.NESTED)
+    public void methodB() {
+        // 嵌套在 methodA 的事务中
+    }
+
+开发者理解：嵌套事务允许部分回滚。例如，methodB() 的事务可以在 methodA() 回滚时被部分回滚，而不影响整个 methodA() 事务的提交。
+

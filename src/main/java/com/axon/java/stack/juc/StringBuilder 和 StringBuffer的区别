@@ -1,0 +1,44 @@
+StringBuilder 和 StringBuffer 都是 Java 中用于操作字符串的可变类，它们可以用来创建和修改字符串内容。然而，它们的主要区别在于线程安全性和性能。以下是两者的详细对比：
+
+1. 线程安全性
+
+	•	StringBuffer：是线程安全的。所有涉及修改字符串的方法都被 synchronized 修饰，也就是说多个线程可以安全地同时使用 StringBuffer 对象。由于有同步机制，它的操作较为安全但相对较慢。
+	•	StringBuilder：是非线程安全的。它不进行同步，因此不保证线程安全。在单线程环境中，StringBuilder 的性能优于 StringBuffer。
+
+2. 性能
+
+	•	StringBuffer：由于每次操作都需要同步（加锁和解锁），所以性能比 StringBuilder 要稍差一些，特别是在多线程并发的情况下。如果不需要线程安全性，StringBuffer 会产生不必要的性能开销。
+	•	StringBuilder：由于没有同步开销，因此在大多数情况下，尤其是在单线程环境中，StringBuilder 的性能比 StringBuffer 要好得多。
+
+3. 适用场景
+
+	•	StringBuffer：适用于多线程的场景，在多个线程中共享同一个 StringBuffer 对象时，建议使用它来确保线程安全。
+	•	StringBuilder：适用于单线程的场景。如果你不需要线程安全性并且只在单线程环境下使用，可以选择 StringBuilder，以获得更好的性能。
+
+4. 常用方法
+
+两者在 API 设计上非常相似，常用的方法包括：
+
+	•	append()：在末尾追加字符串。
+	•	insert()：在指定位置插入字符串。
+	•	delete()：删除指定范围内的字符。
+	•	reverse()：将字符串反转。
+	•	toString()：将内容转换为 String 对象。
+
+示例代码
+
+	1.	StringBuffer 示例：
+	    StringBuffer stringBuffer = new StringBuffer("Hello");
+        stringBuffer.append(" World");
+        System.out.println(stringBuffer);  // 输出：Hello World
+    2.	StringBuilder 示例：
+        StringBuilder stringBuilder = new StringBuilder("Hello");
+        stringBuilder.append(" World");
+        System.out.println(stringBuilder);  // 输出：Hello World
+
+总结
+
+	•	选择 StringBuffer：在多线程环境下使用，因为它是线程安全的。
+	•	选择 StringBuilder：在单线程环境下使用，因为它的性能更优。
+
+一般情况下，如果你确定代码在单线程中执行，推荐使用 StringBuilder。如果有多线程操作，则应该使用 StringBuffer 以确保线程安全。
