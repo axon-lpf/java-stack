@@ -1,7 +1,7 @@
 package com.axon.java.stack.data.structures.linklist;
 
-import cn.hutool.json.JSON;
 
+import java.util.Stack;
 
 /**
  * 1.求单链表中有效节点的个数
@@ -22,7 +22,7 @@ public class SingleLinkListDemo {
 
         HeroNode heroNode4 = new HeroNode(60, "武松");
 
-        HeroNode heroNode5= new HeroNode(20, "松江");
+        HeroNode heroNode5 = new HeroNode(20, "松江");
 
 
         list.addHeroNodeByOrder(heroNode1);
@@ -40,9 +40,30 @@ public class SingleLinkListDemo {
         System.out.println("删除后的节点列表。。。。。。。");
         list.showList();
 
-        list.updateHero(new HeroNode(50,"智多星"));
+        list.updateHero(new HeroNode(50, "智多星"));
 
         System.out.println("修改后的节点列表");
+
+        list.showList();
+
+        System.out.println("获取有效节点的个数。。。。。。。");
+
+        int linkCount = list.getLinkCount(list.getHeroHeadNode());
+
+        System.out.println("当前有效节点的个数是" + linkCount);
+
+        System.out.println("获取倒数第K个节点。。。。。。。。");
+        list.queryKNode(list.getHeroHeadNode(), 1);
+
+        System.out.println("从尾到头打印单链表。。。。。。");
+
+        list.printLink(list.getHeroHeadNode());
+
+        System.out.println("开始反转链表。。。。。。。。");
+
+        list.reversalLink(list.getHeroHeadNode());
+
+        System.out.println("反转后端list集合列表。。。。。。。");
 
         list.showList();
 
@@ -56,6 +77,17 @@ class SingleLinkList {
 
     //这是头节点
     HeroNode heroHeadNode = new HeroNode(0, null);
+
+
+    /**
+     * 获取头节点
+     *
+     * @return
+     */
+    public HeroNode getHeroHeadNode() {
+        return this.heroHeadNode;
+    }
+
 
     /**
      * 添加英雄节点
@@ -102,7 +134,8 @@ class SingleLinkList {
 
 
     /**
-     *   移除系节点
+     * 移除系节点
+     *
      * @param no
      */
     public void removeHeroNode(int no) {
@@ -135,10 +168,11 @@ class SingleLinkList {
     }
 
     /**
-     *  更新英雄
+     * 更新英雄
+     *
      * @param heroNode
      */
-    public  void updateHero(HeroNode heroNode) {
+    public void updateHero(HeroNode heroNode) {
         HeroNode tempNode = heroHeadNode;
         if (tempNode.getNext() == null) {
             System.out.println("当前链表的节点为空，无法进行修改");
@@ -159,12 +193,14 @@ class SingleLinkList {
             //修改名称
             tempNode.setName(heroNode.getName());
         } else {
-            System.out.println("yichang");
+            System.out.println("更新异常了");
         }
     }
 
 
-    // 展示链表中的数据
+    /**
+     * 展示链表中的数据
+     */
     public void showList() {
         // 判断链表是否为空
         if (heroHeadNode.getNext() == null) {
@@ -180,6 +216,93 @@ class SingleLinkList {
             temp = temp.getNext();
         }
     }
+
+    /**
+     * 获取有效节点的个数
+     */
+    public int getLinkCount(HeroNode heroNode) {
+        if (heroNode.getNext() == null) {
+            System.out.println("链表节点数为空");
+            return 0;
+        }
+        int count = 0;
+        HeroNode tempNode = heroNode;
+        while (tempNode.getNext() != null) {
+            count = count + 1;
+            tempNode = tempNode.getNext();
+        }
+        return count;
+    }
+
+    /**
+     * 查找单链表中倒数第k个节点
+     *
+     * @param heardNode
+     * @param kNode
+     */
+    public void queryKNode(HeroNode heardNode, int kNode) {
+        if (kNode < 0) {
+            System.out.println("倒数节点错误");
+            return;
+        }
+        int linkCount = this.getLinkCount(heardNode);
+        if (kNode > linkCount) {
+            System.out.println("倒数节点错误,不能超过链表节点总和");
+            return;
+        }
+        //不算头节点， 头节点不是有效节点
+        HeroNode temp = heardNode.getNext();
+        for (int i = 0; i < linkCount - kNode; i++) {
+            temp = temp.getNext();
+        }
+        System.out.println("找到节点了，节点信息" + temp.toString());
+
+    }
+
+    /**
+     * 反转链表
+     *
+     * @param heardNode
+     */
+    public void reversalLink(HeroNode heardNode) {
+        if (heardNode.getNext() == null) {
+            System.out.println("当前链表为空");
+            return;
+        }
+        HeroNode curNode = heardNode.getNext();
+        HeroNode next = null; // 指向当前节点的下一个节点
+        HeroNode reversalHead = new HeroNode(0, "");
+        while (curNode != null) {
+            next = curNode.getNext(); // 获取到当前节点的下一节点
+            curNode.setNext(reversalHead.getNext());         //当前节点的下一节点设置为头
+            reversalHead.setNext(curNode);   // 设置当前节点
+            curNode = next; //后移
+        }
+        heardNode.setNext(reversalHead.getNext());
+    }
+
+    /**
+     * 从尾到头打印单链表
+     *
+     * @param heardNode
+     */
+    public void printLink(HeroNode heardNode) {
+        if (heardNode.getNext() == null) {
+            System.out.println("当前链表为空");
+            return;
+        }
+        HeroNode temp = heardNode;
+        Stack<HeroNode> stack = new Stack<>();
+        while (temp.getNext() != null) {
+            stack.push(temp.getNext());
+            temp = temp.getNext();
+        }
+        while (!stack.empty()) {
+            HeroNode pop = stack.pop();
+            System.out.println(pop.toString());
+        }
+    }
+
 
 }
 
