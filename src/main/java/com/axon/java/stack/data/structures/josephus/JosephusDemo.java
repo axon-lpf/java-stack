@@ -4,6 +4,8 @@ package com.axon.java.stack.data.structures.josephus;
  * 约瑟夫问题
  * <p>
  * 场景：小朋友围城一圈，手绢的游戏
+ * <p>
+ * 这里是初版-错误的， 不够全面的。
  */
 public class JosephusDemo {
 
