@@ -1,4 +1,4 @@
-package com.axon.java.stack.data.structures.josephus;
+package com.axon.java.stack.data.structures.linklist.josephus;
 
 /**
  * 约瑟夫问题
