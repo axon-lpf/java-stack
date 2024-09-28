@@ -1,7 +1,7 @@
 package com.axon.java.stack.data.structures.sort;
 
 /**
- * 桶排序
+ * 桶排序1
  */
 public class BucketSortDemo {
 
