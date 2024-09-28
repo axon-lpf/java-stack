@@ -11,5 +11,14 @@ public class RecursionDemo {
 
     public static void main(String[] args) {
 
+        test(10000);
+        System.out.println("主方法运行结束");
+
+    }
+
+    public static void test(int n) {
+        if (n > 0) {
+            test(n - 1);
+        }
     }
 }
