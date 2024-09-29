@@ -99,10 +99,12 @@ public class EightQueensDemo {
     // 定义棋盘，  board[i] 表示第i行皇后放在那一列
     private int[] board = new int[N];
 
+    private int count = 0;
+
 
     public void solve(int row) {
         if (placeQueen(row)) {
-            printSolution();
+            // printSolution();
         } else {
             System.out.println("没有找到解决方案");
         }
@@ -113,19 +115,23 @@ public class EightQueensDemo {
     private boolean placeQueen(int row) {
         //表示已经成功放置了所有的皇后
         if (row == N) {
+            count++;
+            System.out.println("开始打印第" + count + "方案");
+            printSolution();
+
             return true;
         }
         for (int col = 0; col < N; col++) {
             if (isSafe(row, col)) {
                 board[row] = col;  //将皇后放置在该列
                 //进行下一行的放置
-                if (placeQueen(row + 1)) {
-                    return true;
-                }
+                placeQueen(row + 1);
             }
         }
+
+
         // 否则无法放置
-        return false;
+        return true;
 
     }
 
@@ -164,7 +170,7 @@ public class EightQueensDemo {
 
     public static void main(String[] args) {
         EightQueensDemo queensDemo = new EightQueensDemo();
-        queensDemo.solve(4);
+        queensDemo.solve(0);
     }
 
 }
