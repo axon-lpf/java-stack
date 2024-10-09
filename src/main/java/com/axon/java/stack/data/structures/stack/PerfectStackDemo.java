@@ -49,12 +49,12 @@ package com.axon.java.stack.data.structures.stack;
  *
  *
  */
-public class ChatgptStackDemo {
+public class PerfectStackDemo {
 
 
     public static void main(String[] args) {
 
-        ChatgptCustomStack customStack = new ChatgptCustomStack(5);
+        PerfectCustomStack customStack = new PerfectCustomStack(5);
 
         customStack.push(10);
         customStack.push(20);
@@ -92,7 +92,7 @@ public class ChatgptStackDemo {
 /**
  * chatgpt自定义栈
  */
-class ChatgptCustomStack {
+class PerfectCustomStack {
 
     private int[] stack;
     private int top = -1;
@@ -103,7 +103,7 @@ class ChatgptCustomStack {
      *
      * @param size 栈的初始大小
      */
-    public ChatgptCustomStack(int size) {
+    public PerfectCustomStack(int size) {
         if (size <= 0) {
             throw new IllegalArgumentException("栈的大小必须大于0");
         }

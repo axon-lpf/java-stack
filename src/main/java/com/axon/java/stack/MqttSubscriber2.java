@@ -6,7 +6,7 @@ public class MqttSubscriber2 {
     public static void main(String[] args) {
         String brokerUrl = "tcp://mqtt.lianok.com:1883"; // MQTT代理的地址
         String clientId = "mqttx_fcc0542f"; // 客户端ID，可以自定义
-        String topic = "/box/message/bsj/SP323BCG100000029"; // 订阅的主题，/pos_pay/message/liandi/  这是固定的。 4022232110000001 这个编号是动态的，即当前pos机设备编号。
+        String topic = "/box/message/bsj/SP323BCG100000029"; // 订阅的主题，/pos_pay/message/liandi/  这是固定的。 4022232110000001 这个编号是动态的，即当前pos机设备编号。 sdfas
 
         try {
             IMqttClient client = new MqttClient(brokerUrl, clientId);
