@@ -58,9 +58,9 @@ import java.util.concurrent.*;
  * <p>
  * 场景： 银行办办理业务
  * 1.总共5个窗口，今天周末， 只有两个窗口在有工作人员办理。
-    银行有5个窗口，通常情况下只开两个窗口处理业务。
- •	如果排队人数超过10人，银行会开启另外3个窗口，这些窗口会先处理排队中的人，而不是直接处理新来的人。
- •	如果排队人数继续增加，超过银行的处理能力（例如超过20人），银行将拒绝服务新来的人，触发拒绝策略。
+ * 银行有5个窗口，通常情况下只开两个窗口处理业务。
+ * •	如果排队人数超过10人，银行会开启另外3个窗口，这些窗口会先处理排队中的人，而不是直接处理新来的人。
+ * •	如果排队人数继续增加，超过银行的处理能力（例如超过20人），银行将拒绝服务新来的人，触发拒绝策略。
  * <p>
  * maximumPoolSize 如何去设置呢？
  * 分两种情况：
@@ -68,37 +68,35 @@ import java.util.concurrent.*;
  * maximumPoolSize=服务器核心数/(1-阻塞系数)  阻塞系数的值一般是0.8-到0.9之间
  * CPU密集型： 执行大量运算的则是cpu密集型
  * maximumPoolSize=服务器核心数+1
- *
- *
+ * <p>
+ * <p>
  * chatgpt 参数推荐的方案
- *  在配置线程池时，corePoolSize、maximumPoolSize、workQueue、keepAliveTime 的选择取决于任务的性质（CPU密集型或I/O密集型）、系统资源、以及任务的负载情况。以下是一些配置的指导原则，可以帮助你达到最佳性能：
- *
+ * 在配置线程池时，corePoolSize、maximumPoolSize、workQueue、keepAliveTime 的选择取决于任务的性质（CPU密集型或I/O密集型）、系统资源、以及任务的负载情况。以下是一些配置的指导原则，可以帮助你达到最佳性能：
+ * <p>
  * 1. corePoolSize（核心线程数）
- * 	•	CPU密集型任务：如果任务主要是CPU计算密集型（如复杂计算、大量循环等），一般建议将 corePoolSize 设置为服务器可用核心数（Runtime.getRuntime().availableProcessors()）的数量或稍微加1。例如，服务器有4个核心，可以设置 corePoolSize 为4或5。
- * 	•	I/O密集型任务：如果任务主要涉及I/O操作（如数据库查询、文件读写、网络通信等），corePoolSize 可以设置为核心数的2倍或更多，因为I/O操作会使线程阻塞，更多的线程可以充分利用CPU的空闲时间。
- *
+ * •	CPU密集型任务：如果任务主要是CPU计算密集型（如复杂计算、大量循环等），一般建议将 corePoolSize 设置为服务器可用核心数（Runtime.getRuntime().availableProcessors()）的数量或稍微加1。例如，服务器有4个核心，可以设置 corePoolSize 为4或5。
+ * •	I/O密集型任务：如果任务主要涉及I/O操作（如数据库查询、文件读写、网络通信等），corePoolSize 可以设置为核心数的2倍或更多，因为I/O操作会使线程阻塞，更多的线程可以充分利用CPU的空闲时间。
+ * <p>
  * 2. maximumPoolSize（最大线程数）
- *
- * 	•	CPU密集型任务：最大线程数一般设置为 corePoolSize + 1，因为额外的线程对CPU密集型任务的效率提升有限。
- * 	•	I/O密集型任务：最大线程数可以设置为 corePoolSize 的2倍或3倍，甚至更高，具体取决于I/O操作的阻塞程度。通常可以设置为 corePoolSize 的4到5倍。
- *
+ * <p>
+ * •	CPU密集型任务：最大线程数一般设置为 corePoolSize + 1，因为额外的线程对CPU密集型任务的效率提升有限。
+ * •	I/O密集型任务：最大线程数可以设置为 corePoolSize 的2倍或3倍，甚至更高，具体取决于I/O操作的阻塞程度。通常可以设置为 corePoolSize 的4到5倍。
+ * <p>
  * 3. workQueue（等待队列）
- *
- * 	•	任务数量和处理速度：如果任务数量多且处理速度较快，可以使用较大的队列（如 LinkedBlockingQueue）。这允许更多任务排队等待，而不是立即启动新的线程。
- * 	•	固定任务数量：如果任务数量是固定的，并且不希望消耗太多内存，可以使用 ArrayBlockingQueue 并设置合理的大小。
- * 	•	建议：如果 maximumPoolSize 很大，workQueue 可以设置为较小的值，以确保高并发下线程池能够处理任务。如果希望队列能够缓解压力，队列大小应设置为可以接受的任务积压数。
- *
+ * <p>
+ * •	任务数量和处理速度：如果任务数量多且处理速度较快，可以使用较大的队列（如 LinkedBlockingQueue）。这允许更多任务排队等待，而不是立即启动新的线程。
+ * •	固定任务数量：如果任务数量是固定的，并且不希望消耗太多内存，可以使用 ArrayBlockingQueue 并设置合理的大小。
+ * •	建议：如果 maximumPoolSize 很大，workQueue 可以设置为较小的值，以确保高并发下线程池能够处理任务。如果希望队列能够缓解压力，队列大小应设置为可以接受的任务积压数。
+ * <p>
  * 4. keepAliveTime（线程存活时间）
- *
- * 	•	短期突发任务：如果任务是短期的突发性负载，keepAliveTime 可以设置得较短（如30秒至1分钟），这样当负载消失时，线程池可以快速回收多余的线程。
- * 	•	长期负载任务：如果任务负载长期存在，可以将 keepAliveTime 设置得较长，以避免频繁的线程创建和销毁带来的开销。
- *
+ * <p>
+ * •	短期突发任务：如果任务是短期的突发性负载，keepAliveTime 可以设置得较短（如30秒至1分钟），这样当负载消失时，线程池可以快速回收多余的线程。
+ * •	长期负载任务：如果任务负载长期存在，可以将 keepAliveTime 设置得较长，以避免频繁的线程创建和销毁带来的开销。
+ * <p>
  * 5. 拒绝策略（handler）
- *
- * 	•	任务不能丢失：选择 CallerRunsPolicy，当线程池和队列都满时，由调用线程执行任务，减少任务丢失的可能性。
- * 	•	允许任务丢弃：如果允许丢弃部分任务，可以选择 DiscardPolicy 或 DiscardOldestPolicy。
- *
- *
+ * <p>
+ * •	任务不能丢失：选择 CallerRunsPolicy，当线程池和队列都满时，由调用线程执行任务，减少任务丢失的可能性。
+ * •	允许任务丢弃：如果允许丢弃部分任务，可以选择 DiscardPolicy 或 DiscardOldestPolicy。
  */
 public class PollTest {
 
@@ -111,12 +109,13 @@ public class PollTest {
 
         int coreSize = Runtime.getRuntime().availableProcessors();
         System.out.println("当前系统的核心数是" + coreSize);
-        ExecutorService customer = new ThreadPoolExecutor(2, 2 * 2, 10, TimeUnit.SECONDS, new ArrayBlockingQueue<>(3), new ThreadPoolExecutor.AbortPolicy());
+        ThreadPoolExecutor customer = new ThreadPoolExecutor(2, 2 * 2, 10, TimeUnit.SECONDS, new ArrayBlockingQueue<>(3), new ThreadPoolExecutor.AbortPolicy());
         // 这里总共只能最大接受的请求数位7， 那多出的则被拒绝掉
         for (int i = 0; i < 10; i++) {
             int finalI = i;
+            System.out.println(Thread.currentThread().getName() + "线程正在处理" + finalI+"当前队列数量" + customer.getQueue().size());
             customer.execute(() -> {
-                System.out.println(Thread.currentThread().getName() + "线程正在处理"+ finalI);
+                System.out.println(Thread.currentThread().getName() + "线程正在处理" + finalI+"当前队列数量" + customer.getQueue().size());
                 try {
                     Thread.sleep(2000);
                 } catch (InterruptedException e) {
