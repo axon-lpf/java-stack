@@ -52,7 +52,6 @@ import java.util.Arrays;
  * [5, 1, -1, 9, 10, 20, 30]
  * [1, -1, 5, 9, 10, 20, 30]
  * [-1, 1, 5, 9, 10, 20, 30]
- * [-1, 1, 5, 9, 10, 20, 30]
  *
  */
 public class BubbleSortDemo {

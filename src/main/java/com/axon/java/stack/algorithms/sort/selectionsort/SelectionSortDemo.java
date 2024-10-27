@@ -46,16 +46,13 @@ import java.util.Arrays;
  * <p>
  * <p>
  * 总结规律，依次类推。
- *
+ * <p>
  * [-1, 10, 20, 30, 9, 5, 1]
  * [-1, 1, 20, 30, 10, 9, 5]
  * [-1, 1, 5, 30, 20, 10, 9]
  * [-1, 1, 5, 9, 30, 20, 10]
  * [-1, 1, 5, 9, 10, 30, 20]
  * [-1, 1, 5, 9, 10, 20, 30]
- * [-1, 1, 5, 9, 10, 20, 30]
- * [-1, 1, 5, 9, 10, 20, 30]
- *
  */
 public class SelectionSortDemo {
 
@@ -70,12 +67,13 @@ public class SelectionSortDemo {
     }
 
     /**
-     *  选择排序算法
+     * 选择排序算法
+     *
      * @param initArray
      */
     public static void selectionSortToArray(int[] initArray) {
 
-        for (int i = 0; i < initArray.length; i++) {
+        for (int i = 0; i < initArray.length - 1; i++) {
 
             for (int j = i + 1; j < initArray.length; j++) {
                 //如果i的位置大于j的位置的元素，则两个需要交换位置
