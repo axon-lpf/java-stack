@@ -1,6 +1,7 @@
 package com.axon.java.stack.algorithms.sort.insertionsort;
 
 import java.util.Arrays;
+import java.util.Random;
 
 /**
  * 插入排序算法
@@ -51,11 +52,18 @@ public class InsertionSortDemo {
 
     public static void main(String[] args) {
 
-        int[] initArray = new int[]{10, 9, 20, 30, 5, 1, -1};
-        //插入排序算法
-        insertionSort(initArray);
+        int[] arrs = new int[]{10, 9, 20, 30, 5, 1, -1};
+        arrs = generateRandomArray(100000);
 
-        //System.out.println(Arrays.toString(initArray));
+        long beginTime = System.currentTimeMillis();
+        System.out.println("开始时间" + beginTime);
+        // 选择排序
+        insertionSort2(arrs);
+        long endTime = System.currentTimeMillis();
+        System.out.println("结束时间" + endTime);
+
+        System.out.println(Arrays.toString(arrs));
+        System.out.println("总共耗时" + (endTime - beginTime));
     }
 
     public static void insertionSort(int[] initArray) {
@@ -73,7 +81,7 @@ public class InsertionSortDemo {
             }
             //TODO 核心代码块。
             initArray[preIndex + 1] = currentValue;
-            System.out.println(Arrays.toString(initArray));
+            //System.out.println(Arrays.toString(initArray));
 
         }
     }
@@ -98,7 +106,17 @@ public class InsertionSortDemo {
             initArray[preIndex + 1] = currentValue;
 
             // 输出当前状态（可选）
-            System.out.println("当前状态: " + Arrays.toString(initArray));
+           // System.out.println("当前状态: " + Arrays.toString(initArray));
         }
+    }
+
+    public static int[] generateRandomArray(int size) {
+        Random random = new Random();
+        int[] arr = new int[size];
+        for (int i = 0; i < size; i++) {
+            // 生成范围在 -100000 到 100000 之间的随机数
+            arr[i] = random.nextInt(size) - 50000;
+        }
+        return arr;
     }
 }

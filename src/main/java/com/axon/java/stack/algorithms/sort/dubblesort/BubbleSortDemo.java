@@ -2,6 +2,7 @@ package com.axon.java.stack.algorithms.sort.dubblesort;
 
 
 import java.util.Arrays;
+import java.util.Random;
 
 /**
  * 初始化，数组 [10,9,20,30,5,1,-1] ，针对这个数组进行冒泡排序
@@ -45,24 +46,28 @@ import java.util.Arrays;
  * 4.10和-1比较， 10大于-1，  则10和-1交换位置， 结果： [9,5,1,-1,10,20,30]  TODO  注意；10和20不用比较了， 因为总共7个元素， 第二轮结束，最后两个元素都是有序的，则没有后续步骤了
  * <p>
  * 总结规律，依次类推。
- *
+ * <p>
  * [9, 10, 20, 5, 1, -1, 30]
  * [9, 10, 5, 1, -1, 20, 30]
  * [9, 5, 1, -1, 10, 20, 30]
  * [5, 1, -1, 9, 10, 20, 30]
  * [1, -1, 5, 9, 10, 20, 30]
  * [-1, 1, 5, 9, 10, 20, 30]
- *
  */
 public class BubbleSortDemo {
 
     public static void main(String[] args) {
-        int[] initArray = new int[]{10, 9, 20, 30, 5, 1, -1};
-        //冒泡排序
-        bubbleSortToArray(initArray);
+        int[] arrs = new int[]{20, -1, 30, 8, 0, 13, 55, 3};
+        arrs = generateRandomArray(100000);
 
-        System.out.println(Arrays.toString(initArray));
-
+        long beginTime = System.currentTimeMillis();
+        System.out.println("开始时间" + beginTime);
+        // 冒泡排序
+        bubbleSortToArray(arrs);
+        System.out.println(Arrays.toString(arrs));
+        long endTime = System.currentTimeMillis();
+        System.out.println("结束时间" + endTime);
+        System.out.println("总共耗时" + (endTime - beginTime));
     }
 
 
@@ -92,8 +97,18 @@ public class BubbleSortDemo {
                 // 否则，没有交换过位置，说明都是有序的，则结束。
                 break;
             }
-            System.out.println(Arrays.toString(initArray));
+           // System.out.println(Arrays.toString(initArray));
         }
 
+    }
+
+    public static int[] generateRandomArray(int size) {
+        Random random = new Random();
+        int[] arr = new int[size];
+        for (int i = 0; i < size; i++) {
+            // 生成范围在 -100000 到 100000 之间的随机数
+            arr[i] = random.nextInt(size) - 50000;
+        }
+        return arr;
     }
 }
