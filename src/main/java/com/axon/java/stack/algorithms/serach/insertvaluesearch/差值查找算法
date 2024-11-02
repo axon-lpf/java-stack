@@ -1,0 +1,40 @@
+插值查找算法是一种基于二分查找算法改进的查找算法，专门设计用于元素分布较为均匀的有序数组。在数组分布均匀的情况下，它可以提供比二分查找更高的效率。插值查找通过一个比例公式估算目标值所在的索引位置，使其更加接近查找目标的位置。
+
+插值查找算法的公式推导
+
+插值查找的核心公式为：
+
+\text{mid} = \text{left} + \frac{( \text{searchKey} - \text{arr[left]} )}{( \text{arr[right]} - \text{arr[left]} )} \times (\text{right} - \text{left})
+
+这个公式的目的是估算目标值 searchKey 在数组中的位置。推导思路如下：
+
+	1.	确定查找区间：
+	•	在数组中查找范围从 left 到 right。
+	•	arr[left] 为左边界的值，arr[right] 为右边界的值。
+	2.	比例假设：
+	•	假设查找目标值 searchKey 在数组中均匀分布，则可以根据比例关系来确定 searchKey 可能位于的位置。
+	•	假设 searchKey 相对于整个区间 (arr[left], arr[right]) 的位置可以用比例关系来近似表达。我们设：
+
+\frac{\text{mid} - \text{left}}{\text{right} - \text{left}} \approx \frac{\text{searchKey} - \text{arr[left]}}{\text{arr[right]} - \text{arr[left]}}
+
+其中：
+	•	\frac{\text{mid} - \text{left}}{\text{right} - \text{left}} 表示 mid 在整个区间位置的比例。
+	•	\frac{\text{searchKey} - \text{arr[left]}}{\text{arr[right]} - \text{arr[left]}} 表示 searchKey 在值范围内的比例。
+	3.	计算 mid 的位置：
+	•	由上式可以推导出 mid 的值：
+
+\text{mid} = \text{left} + \frac{( \text{searchKey} - \text{arr[left]} )}{( \text{arr[right]} - \text{arr[left]} )} \times (\text{right} - \text{left})
+
+	•	该公式通过插值来确定 mid 的位置，使其更接近目标值 searchKey 的预期位置，从而减少不必要的比较次数。
+
+插值查找算法的局限性
+
+	•	分布均匀的情况下，插值查找性能较好。如果数据不均匀（如有大量重复元素），插值查找的性能优势会降低，甚至可能退化到线性查找。
+	•	边界检查：在实现插值查找时需要注意避免除零错误（arr[right] - arr[left] == 0）。
+
+插值查找算法的复杂度
+
+	•	时间复杂度：在理想的均匀分布下，时间复杂度为 O(log(log n))，比二分查找更高效；但在不均匀分布的情况下，时间复杂度会接近 O(n)。
+	•	空间复杂度：通常为 O(1)，与二分查找类似。
+
+插值查找更适合分布均匀的大规模数据集，利用比例公式可以大幅减少查找步骤。
