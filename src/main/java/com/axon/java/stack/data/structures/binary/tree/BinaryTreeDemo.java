@@ -6,6 +6,8 @@ import lombok.Data;
  * 剑兰
  * 星火        浮生
  * 安迪    愚公  凌霄
+ * <p>
+ * 二叉树的处理
  */
 public class BinaryTreeDemo {
 
@@ -37,13 +39,13 @@ public class BinaryTreeDemo {
 
         //前缀查找
         TreeNode treeNode = binaryTree.preOrderSearch(5);
-        System.out.println("前序查找结果"+treeNode);
+        System.out.println("前序查找结果" + treeNode);
 
         treeNode = binaryTree.inOrderSearch(4);
-        System.out.println("中序查找结果"+treeNode);
+        System.out.println("中序查找结果" + treeNode);
 
         treeNode = binaryTree.postOrderSearch(3);
-        System.out.println("后序查找结果"+treeNode);
+        System.out.println("后序查找结果" + treeNode);
 
 
     }
