@@ -2,6 +2,9 @@ package com.axon.java.stack.data.structures.binary.tree;
 
 import lombok.Data;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 /**
  * 剑兰
  * 星火        浮生
@@ -46,6 +49,15 @@ public class BinaryTreeDemo {
 
         treeNode = binaryTree.postOrderSearch(3);
         System.out.println("后序查找结果" + treeNode);
+
+
+        System.out.println("删除前开始前序遍历");
+        binaryTree.preOrder();
+
+        binaryTree.delNode(5);
+
+        System.out.println("删除后开始前序遍历");
+        binaryTree.preOrder();
 
 
     }
@@ -116,6 +128,25 @@ class BinaryTree {
             return null;
         }
         return this.root.inOrderSearch(id);
+    }
+
+    /**
+     * 这里去删除节点
+     *
+     * @param id
+     */
+    public void delNode(int id) {
+        if (root == null) {
+            System.out.println("当前节点为空");
+            return;
+        }
+        if (this.root.getId() == id) {
+            this.root = null;
+        } else {
+            // 去删除节点
+            this.root.delNode(id);
+        }
+
     }
 
     /**
@@ -260,5 +291,31 @@ class TreeNode {
             return this;
         }
         return null;
+    }
+
+
+    public void delNode(int id) {
+        // 检查左边的节点是否相等
+        if (this.left != null && this.left.id == id) {
+            this.setLeft(null);
+            return;
+        }
+        //检查右边的节点是否相等
+        if (this.right != null && this.right.id == id) {
+            this.setRight(null);
+            return;
+        }
+
+        // 从左边开始找
+        if (this.left != null) {
+            this.left.delNode(id);
+        }
+
+        /**
+         *  从右边开始找
+         */
+        if (this.right != null) {
+            this.right.delNode(id);
+        }
     }
 }
