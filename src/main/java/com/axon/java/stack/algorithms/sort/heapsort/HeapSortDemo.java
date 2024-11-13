@@ -1,5 +1,7 @@
 package com.axon.java.stack.algorithms.sort.heapsort;
 
+import java.util.Arrays;
+
 /**
  * 添加堆排序demo
  *
@@ -178,5 +180,50 @@ public class HeapSortDemo {
 
     public static void main(String[] args) {
 
+       int []  arr = {4, 6, 8, 5, 9};  //初始化数组
+
+        for (int i = (arr.length/2)-1; i >=0 ; i--) {
+            //构建大顶堆
+            addJust(arr, i, arr.length);
+            System.out.println(Arrays.toString(arr));
+        }
+
+        for (int j = arr.length-1; j >0 ; j--) {
+            int temp = arr[j]; //将最小的值 赋值到临时变量
+            arr[j]= arr[0]; // 将最大值赋值度到最后一位
+            arr[0]=temp; // 将最小值赋值到第一位
+            addJust(arr, 0, j);
+        }
+
+        System.out.println(Arrays.toString(arr));
+
+    }
+
+    /**
+     *  构造大顶堆
+     * @param arr
+     * @param i
+     * @param length
+     */
+    public  static  void addJust( int [] arr,int i, int length){
+        int temp = arr[i];
+
+        for (int k =i *2+1 ; k <length; k=k*2+1) {
+            //如果左边节点小于右边节点， 则k++,取右边节点的索引
+            if (k+1<length&& arr[k]< arr[k+1]) {
+                k++;
+            }
+            //非叶子节点小于右节点
+            if (temp<arr[k]) {
+                //将右边节点的值，赋值给非叶子结点
+                arr[i] = arr[k];
+                //将右边节点的索引赋值给i
+                i = k;
+            }else {
+                break;
+            }
+        }
+        //将非叶子节点，赋值给右边节点， 此时就完成了交换
+        arr[i] = temp;
     }
 }
