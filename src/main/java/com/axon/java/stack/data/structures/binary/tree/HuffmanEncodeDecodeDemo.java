@@ -5,8 +5,35 @@ import java.util.*;
 
 /**
  * 赫夫曼编码
+ *
+ *     /**
+ *      * 编码压缩核心步骤
+ *      * 1>.获取字符串的bytes.
+ *      * 2>.循环遍历字符串的bytes, 根据每个byte值，不断生成一个赫夫曼树
+ *      * TreeNode{
+ *      * Byte data; 对应字符串的byte值，
+ *      * int  Weight;  权重，该字符串出现了多少次
+ *      * TreeNode left;
+ *      * TreeNode right;
+ *      * }
+ *      * 3>.根据赫夫曼树左边节点是0 ，右边节点是1， 父节点data为空的规则生成一个hashMap编码表 ， key 对应的是字符串的ASIC值， value 对应的是赫夫曼码
+ *      * 4>.编码压缩
+ *      * 4.1>循环遍历原有的字符串的bytes, 然后根据 byte值，即ASIC码，取出 赫夫曼编码表中的 赫夫曼编码，
+ *      * 4.2>将所有的赫夫曼编码拼接成一个字符串
+ *      * 4.3>将整个赫夫曼编码的字符串，按照二进制的8位进行切割， 然后转换成一个byte ,然后返回数组。
+ *      *
+ *
+ *       解码核心步骤：
+ *         1>.获得压缩后的byte数组 和赫夫曼编码表
+ *         2>.循环遍历byte数组，恢复成原来的赫夫曼码
+ *         3>.将赫夫曼编码表中key 和value进行对调，  原来的value变成key(赫夫曼码), 原来的key 变成value(ASIC码).
+ *         4>.将第二步骤恢复的赫夫曼编码的字符串，循环遍历，根据 转换后的赫夫曼编码表中的key 进行匹配 。
+ *         5>.第四步操作完毕之后得到一个list 或者byte数组，
+ *         6>.将数组转换成String,就得到了原始的字符串结果
+ *
+ *
  */
-public class HuffmanEncodeDemo {
+public class HuffmanEncodeDecodeDemo {
 
     public static void main(String[] args) {
         String str = "i like like like java do you like a java";
@@ -14,6 +41,7 @@ public class HuffmanEncodeDemo {
         byte[] bytes = str.getBytes();
         System.out.println("原始长度是" + bytes.length);
         System.out.println(Arrays.toString(bytes));
+
 
         HuffmanEncode huffmanEncode = new HuffmanEncode();
         //这里构建赫夫曼树
@@ -25,8 +53,12 @@ public class HuffmanEncodeDemo {
 
         //生成二进制的bytes
         byte[] zip = huffmanEncode.zip(bytes, huffmanCode);
-
         System.out.println("压缩后的结果是：" + Arrays.toString(zip));
+
+        byte[] decode = huffmanEncode.decode(zip, huffmanCode);
+
+        System.out.println("解码后结果是" + new String(decode));
+
 
         // 后面进行解码
         //1.将压缩后的二进制的字节码绩效恢复， 即恢复成原来的赫夫曼码
@@ -37,42 +69,97 @@ public class HuffmanEncodeDemo {
     }
 
 
-    /**
-     *  编码压缩核心步骤
-     *  1>.获取字符串的bytes.
-     *  2>.循环遍历字符串的bytes, 根据每个byte值，不断生成一个赫夫曼树
-     *     TreeNode{
-     *         Byte data; 对应字符串的byte值，
-     *         int  Weight;  权重，该字符串出现了多少次
-     *         TreeNode left;
-     *         TreeNode right;
-     *     }
-     *  3>.根据赫夫曼树左边节点是0 ，右边节点是1， 父节点data为空的规则生成一个hashMap编码表 ， key 对应的是字符串的ASIC值， value 对应的是赫夫曼码
-     *  4>.编码压缩
-     *      4.1>循环遍历原有的字符串的bytes, 然后根据 byte值，即ASIC码，取出 赫夫曼编码表中的 赫夫曼编码，
-     *      4.2>将所有的赫夫曼编码拼接成一个字符串
-     *      4.3>将整个赫夫曼编码的字符串，按照二进制的8位进行切割， 然后转换成一个byte ,然后返回数组。
-     * @param bytes
-     * @return
-     */
-    public static byte[] zipEncode(byte[] bytes) {
-        HuffmanEncode huffmanEncode = new HuffmanEncode();
-        //这里构建赫夫曼树
-        EncodeNode encodeNode = huffmanEncode.buildHuffmanTree(bytes);
 
-        Map<Byte, String> huffmanCode = huffmanEncode.getHuffmanCode(encodeNode);
-        System.out.println("生成的赫夫曼编码表" + huffmanCode);
-        //生成二进制的bytes
-        byte[] zip = huffmanEncode.zip(bytes, huffmanCode);
-
-        System.out.println("压缩后的结果是：" + Arrays.toString(zip));
-
-        return zip;
-    }
 }
 
 
 class HuffmanEncode {
+
+
+    /**
+     * 解码逻辑
+     *
+     * @param bytes  压缩后的byte数组
+     * @param huffmanCodes 赫夫曼编码表 ， ASIC和 赫夫曼码的 key  value
+     * @return 返回解码后的byte数组
+     */
+    public byte[] decode(byte[] bytes, Map<Byte, String> huffmanCodes) {
+
+        StringBuilder decodeString = new StringBuilder();
+
+        for (int i = 0; i < bytes.length; i++) {
+
+            //判断当前是不是最后一位
+            boolean flag = (i == bytes.length - 1);
+
+            String s = this.byteToString(bytes[i], !flag);
+            decodeString.append(s);
+        }
+
+        System.out.println("解码后的赫夫曼码" + decodeString);
+
+        //处理huffmanCodes
+        Map<String, Byte> huffmanByteCodes = new HashMap<>();
+
+        for (Map.Entry<Byte, String> key : huffmanCodes.entrySet()) {
+            huffmanByteCodes.put(key.getValue(), key.getKey());
+        }
+
+        List<Byte> result = new ArrayList<>();
+        for (int i = 0; i < decodeString.length(); ) {
+
+            boolean flag = true;
+            int count = 1;
+            Byte b = null;
+            while (flag) {
+                String key = decodeString.substring(i, i + count);
+
+                b = huffmanByteCodes.get(key);
+                if (b == null) {
+                    count++;
+                } else {
+                    flag = false;
+                }
+            }
+            result.add(b);
+            i = i + count;
+        }
+
+        byte[] byteResult = new byte[result.size()];
+        for (int i = 0; i < byteResult.length; i++) {
+
+            byteResult[i] = result.get(i);
+        }
+
+        return byteResult;
+
+
+    }
+
+
+    /**
+     * 将字节进行转换
+     *
+     * @param b
+     * @param flag
+     * @return
+     */
+    public String byteToString(byte b, boolean flag) {
+
+        int temp = b;
+
+        //如果是正数，则需要补高位
+        if (flag) {
+            temp |= 256; // 按位与运算
+        }
+        String binaryString = Integer.toBinaryString(temp);
+
+        if (flag) {
+            return binaryString.substring(binaryString.length() - 8);
+        } else {
+            return binaryString;
+        }
+    }
 
 
     /**
