@@ -172,6 +172,16 @@ class HuffmanEncode {
     public byte[] zip(byte[] bytes, Map<Byte, String> huffmanCode) {
 
         StringBuilder stringBuilder1 = new StringBuilder();
+
+
+
+
+
+
+
+
+
+
         // 循环遍历拼接， 这里是根据顺序拼接而成
         for (int i = 0; i < bytes.length; i++) {
             //按照字符串的字节码顺序，找出对应的赫夫曼码进行拼接，
