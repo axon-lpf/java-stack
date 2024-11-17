@@ -1,4 +1,4 @@
-package com.axon.java.stack.data.structures.binary.tree;
+package com.axon.java.stack.data.structures.binary.tree.huffman.tree;
 
 import java.util.ArrayList;
 import java.util.Collections;

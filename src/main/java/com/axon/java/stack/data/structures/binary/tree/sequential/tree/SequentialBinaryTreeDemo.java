@@ -1,4 +1,4 @@
-package com.axon.java.stack.data.structures.binary.tree;
+package com.axon.java.stack.data.structures.binary.tree.sequential.tree;
 
 /**
  * 顺序二叉树

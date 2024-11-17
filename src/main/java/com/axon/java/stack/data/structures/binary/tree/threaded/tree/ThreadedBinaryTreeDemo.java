@@ -1,8 +1,6 @@
-package com.axon.java.stack.data.structures.binary.tree;
+package com.axon.java.stack.data.structures.binary.tree.threaded.tree;
 
 import lombok.Data;
-
-import javax.swing.plaf.synth.SynthOptionPaneUI;
 
 /**
  * 线索化二叉树
