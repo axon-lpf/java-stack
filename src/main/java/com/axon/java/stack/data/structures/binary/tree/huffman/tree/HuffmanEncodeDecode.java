@@ -68,24 +68,53 @@ public class HuffmanEncodeDecode {
 
     /**
      * 将字节进行转换
-     *
+     * 这段代码的作用是将一个 byte 类型的值 转换为 二进制字符串表示。它同时支持处理 负数的补码 表示，确保输出的二进制结果长度固定为 8 位。
+     * 代码的功能分解：
+     * 使用示例
+     *      输入正数：byte b = 5，flag = true
+     *      temp = 5，二进制表示：00000000 00000000 00000000 00000101
+     *      Integer.toBinaryString(temp) 输出：101
+     *      执行 temp |= 256，结果不变。
+     *      最终截取 8 位为：00000101
+     *      输入负数：byte b = -128，flag = true
+     *      temp = -128，补码表示：11111111 11111111 11111111 10000000
+     *      执行 temp |= 256，结果为：11111111 11111111 11111111 10000000
+     *      截取最后 8 位为：10000000
+     *      输入负数：byte b = -128，flag = false
+     *      temp = -128
+     *      Integer.toBinaryString(temp) 输出补码：11111111111111111111111110000000
+     *      直接返回这整个二进制串。
      * @param b
      * @param flag
      * @return
      */
     public String byteToString(byte b, boolean flag) {
-
+        //Java 中，byte 是 8 位有符号整数，范围是 -128 到 127。
+        //由于 byte 类型参与位运算时会自动提升为 int（32 位），这里将 byte 转为 int 存储。
+        //例如：-87   正数 87 的二进制表示：01010111，  -87 的补码：取反加 1：
+        //取反：10101000
+        //加 1：10101001
+        //扩展到 32 位（符号扩展）：补高位：11111111 11111111 11111111 10101001
+        //所以才有后续的截取操作binaryString.substring(binaryString.length() - 8);
         int temp = b;
 
         //如果是正数，则需要补高位
+        //256 的二进制表示是 00000001 00000000（即补 8 个高位为 1 字节的长度）。
         if (flag) {
+            //如果 temp 是负数（如 -128），Java 存储时用 补码 表示，直接转换成二进制可能少于 8位（例如补码的负数可能前面有一堆 1 高位）。
+            //= 256 确保补齐 8 位长度的有效部分。
             temp |= 256; // 按位与运算
         }
+        //将整数转换为 二进制字符串。
+        //但结果的长度可能超过 8 位，比如负数的补码或加了 256 的正数。
         String binaryString = Integer.toBinaryString(temp);
 
         if (flag) {
+            //表示需要强制取二进制表示的最后 8 位（有效的 1 字节部分）
+            //binaryString.substring(binaryString.length() - 8) 的作用是截取最后 8 位。
             return binaryString.substring(binaryString.length() - 8);
         } else {
+           // 表示直接返回整个二进制字符串，可能超过 8 位。
             return binaryString;
         }
     }

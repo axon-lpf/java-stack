@@ -48,7 +48,19 @@ public class HuffmanEncodeDecodeDemo {
         System.out.println(Arrays.toString(bytes));
 
 
+        //System.out.println( Integer.toBinaryString(-128));
+
+
+
         HuffmanEncodeDecode huffmanEncode = new HuffmanEncodeDecode();
+
+//        String s = huffmanEncode.byteToString((byte) -87, true);
+//        System.out.println("s的结果是"+s);
+//        s = huffmanEncode.byteToString((byte) -87, false);
+//        System.out.println("s1的结果是"+s);
+
+
+
         //这里构建赫夫曼树
         EncodeNode encodeNode = huffmanEncode.buildHuffmanTree(bytes);
         huffmanEncode.preOrder(encodeNode);
