@@ -55,6 +55,33 @@ class SortTree {
         }
         root.indexOrder();
     }
+
+    /**
+     *  寻找目标节点
+     * @param value
+     * @return
+     */
+    public SortTreeNode getTargetNode(int value) {
+        return null;
+    }
+
+    /**
+     *  寻找目标节点的父节点
+     * @param value
+     * @return
+     */
+    public  SortTreeNode getParentNode(int value) {
+
+        return  null;
+    }
+
+    /**
+     *  删除目标节点
+     * @param value
+     */
+    public  void  delTargetNode(int value) {
+
+    }
 }
 
 
