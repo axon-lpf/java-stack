@@ -1,7 +1,9 @@
 package com.axon.java.stack.data.structures.graph;
 
+import javax.swing.plaf.synth.SynthOptionPaneUI;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 
 /**
  * 图的相关结构和理论、
@@ -35,7 +37,15 @@ public class GraphDemo {
 
         graph.showEdges();
 
+        //深度遍历
+        System.out.println("开始深度遍历");
         graph.dfs();
+
+        graph.isVisited=new boolean[vartexs.length];
+
+        System.out.println("开始广度遍历");
+        //广度遍历
+        graph.bfs();
 
 
 
@@ -55,16 +65,16 @@ class Graph{
     /**
      *  边的数量
      */
-    private  int edgeCount;
+    public   int edgeCount;
     /**
      *  用于存储各个顶点的值
      */
-    private ArrayList<String> graphValue;
+    public ArrayList<String> graphValue;
 
     /**
      *  是否被访问过
      */
-    private  boolean [] isVisited;
+    public   boolean [] isVisited;
 
 
     public Graph(int size) {
@@ -216,6 +226,8 @@ class Graph{
      * 	•	没有其他未访问的相邻节点，递归结束返回上一层。
      * 	3.	递归结束，回到 dfs() 主循环：
      * 	•	所有节点已访问，深度优先遍历完成。
+     *
+     * 	Depth-First Search
      */
     public  void dfs(){
 
@@ -244,13 +256,13 @@ class Graph{
      * @param i
      */
     public  void  dfs(boolean [] isVisited, int i){
-
-        System.out.println("当前节点被访问"+this.getVertices(i));
+        String vertices = this.getVertices(i);
+        System.out.println("当前节点被访问"+vertices);
         this.isVisited[i]=true;
 
         //获取与他相邻的第一个顶点
         int w = this.getFirstVertices(i);
-
+        System.out.println(vertices+"相邻节点是"+this.getVertices(w));
         while (w != -1){
             if (!isVisited[w]){
                 dfs(isVisited,w);
@@ -258,6 +270,54 @@ class Graph{
             //否则的话获取下一个顶点
             w = this.getNextVertices(i,w);
         }
+
+    }
+
+    /**
+     *  广度遍历
+     */
+    public  void  bfs(){
+        for (int i = 0; i < isVisited.length; i++) {
+
+            if (!isVisited[i]) {
+                bfs(isVisited,i);
+            }
+        }
+    }
+
+    /**
+     *  广度遍历 - Breadth-First Search
+     * @param isVisited
+     * @param i
+     */
+    public  void  bfs(boolean [] isVisited, int i){
+        int u;
+        int w;
+        String vertices = this.getVertices(i);
+        System.out.println("当前节点"+vertices);
+        isVisited[i]=true;
+        LinkedList<Integer> queue = new LinkedList<>();
+        queue.addLast(i);
+
+        while (!queue.isEmpty()){
+            //获取头节点
+            u = queue.removeFirst();
+            //获取第一个相邻的节点
+            w = this.getFirstVertices(u);
+
+            while (w != -1){
+                //判断当前节点是否有别访问过
+                if (!isVisited[w]){
+                    System.out.println("当前节点"+this.getVertices(w));
+                    isVisited[w]=true;
+                    queue.addLast(w);
+                }
+                //获取下一个相邻的节点
+                w = this.getNextVertices(u,w);
+            }
+
+        }
+
 
     }
 
