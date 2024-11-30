@@ -35,17 +35,55 @@ public class GraphDemo {
         graph.addEdges(1,4,1);
         graph.addEdges(1,2,1);
 
+        System.out.println("图的展示案例1");
         graph.showEdges();
 
         //深度遍历
-        System.out.println("开始深度遍历");
+        System.out.println("开始深度遍历案例1");
         graph.dfs();
 
         graph.isVisited=new boolean[vartexs.length];
 
-        System.out.println("开始广度遍历");
+        System.out.println("开始广度遍历案例1");
         //广度遍历
         graph.bfs();
+
+
+        //第二个案例
+
+        Graph graph2=new Graph(8);
+
+        String []   vartexs2={"1", "2", "3", "4", "5", "6", "7", "8"};
+        for (int i = 0; i < vartexs2.length; i++) {
+            graph2.addGraph(vartexs2[i]);
+        }
+        graph2.addEdges(0,1,1);
+        graph2.addEdges(0,2,1);
+        graph2.addEdges(1,3,1);
+        graph2.addEdges(1,4,1);
+        graph2.addEdges(3,7,1);
+        graph2.addEdges(4,7,1);
+        graph2.addEdges(2,5,1);
+        graph2.addEdges(2,6,1);
+        graph2.addEdges(5,6,1);
+
+        System.out.println("图的展示案例2");
+        graph2.showEdges();
+
+        //深度遍历
+        System.out.println("开始深度遍历案例2");
+        graph2.dfs();
+
+        graph2.isVisited=new boolean[vartexs2.length];
+
+        System.out.println("开始广度遍历案例2");
+        //广度遍历
+        graph2.bfs();
+
+
+
+
+
 
 
 
@@ -262,7 +300,7 @@ class Graph{
 
         //获取与他相邻的第一个顶点
         int w = this.getFirstVertices(i);
-        System.out.println(vertices+"相邻节点是"+this.getVertices(w));
+       // System.out.println(vertices+"相邻节点是"+this.getVertices(w));
         while (w != -1){
             if (!isVisited[w]){
                 dfs(isVisited,w);
