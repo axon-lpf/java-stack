@@ -7,76 +7,79 @@ import java.util.List;
 /**
  * 二分查找算法
  * 二分查找法的前提是数组必须是有序的
- *
+ * <p>
  * 使用二分查找算法在一个有序数组中查找元素时，逻辑是通过反复缩小查找范围来找到目标值。我们以查找 200 为例，逐步说明查找过程。
- *
+ * <p>
  * 数组为 {10, 20, 33, 55, 99, 99, 200, 300}，查找目标值是 200。
- *
+ * <p>
  * 步骤解析
- *
- * 	1.	初始化左右边界：
- * 	•	左边界 (left) 为 0（数组的第一个索引）。
- * 	•	右边界 (right) 为 7（数组的最后一个索引）。
- * 	2.	计算中间索引：
- * 	•	计算公式为 mid = (left + right) / 2，结果向下取整。
- * 	3.	逐步查找：
- * 	•	第一次查找：
- * 	•	left = 0，right = 7
- * 	•	计算 mid = (0 + 7) / 2 = 3
- * 	•	中间值 arr[3] = 55
- * 	•	比较 200 和 55：
- * 	•	因为 200 > 55，所以目标在 55 的右侧。
- * 	•	更新左边界 left = mid + 1 = 4
- * 	•	第二次查找：
- * 	•	left = 4，right = 7
- * 	•	计算 mid = (4 + 7) / 2 = 5
- * 	•	中间值 arr[5] = 99
- * 	•	比较 200 和 99：
- * 	•	因为 200 > 99，所以目标在 99 的右侧。
- * 	•	更新左边界 left = mid + 1 = 6
- * 	•	第三次查找：
- * 	•	left = 6，right = 7
- * 	•	计算 mid = (6 + 7) / 2 = 6
- * 	•	中间值 arr[6] = 200
- * 	•	比较 200 和 200：
- * 	•	因为 200 == 200，找到目标值 200，返回索引 6。
- *
+ * <p>
+ * 1.	初始化左右边界：
+ * •	左边界 (left) 为 0（数组的第一个索引）。
+ * •	右边界 (right) 为 7（数组的最后一个索引）。
+ * 2.	计算中间索引：
+ * •	计算公式为 mid = (left + right) / 2，结果向下取整。
+ * 3.	逐步查找：
+ * •	第一次查找：
+ * •	left = 0，right = 7
+ * •	计算 mid = (0 + 7) / 2 = 3
+ * •	中间值 arr[3] = 55
+ * •	比较 200 和 55：
+ * •	因为 200 > 55，所以目标在 55 的右侧。
+ * •	更新左边界 left = mid + 1 = 4
+ * •	第二次查找：
+ * •	left = 4，right = 7
+ * •	计算 mid = (4 + 7) / 2 = 5
+ * •	中间值 arr[5] = 99
+ * •	比较 200 和 99：
+ * •	因为 200 > 99，所以目标在 99 的右侧。
+ * •	更新左边界 left = mid + 1 = 6
+ * •	第三次查找：
+ * •	left = 6，right = 7
+ * •	计算 mid = (6 + 7) / 2 = 6
+ * •	中间值 arr[6] = 200
+ * •	比较 200 和 200：
+ * •	因为 200 == 200，找到目标值 200，返回索引 6。
+ * <p>
  * 逻辑总结
- *
+ * <p>
  * 二分查找的核心在于每次缩小查找范围，只需对比一次中间值并决定移动左或右边界，从而逐步锁定目标值的位置。这种方法的时间复杂度为 O(\log n)，适用于有序数组的快速查找。、
- *
- *
+ * <p>
+ * <p>
  * 在二分查找的逻辑中，left > right 表示没有找到目标值的原因如下：
- *
- * 	1.	查找范围缩小：
- * 	•	每次查找时，通过调整 left 或 right 来缩小查找范围。具体来说：
- * 	•	如果 searchKey 小于 mid 的值，则将 right 更新为 mid - 1，缩小到左半部分。
- * 	•	如果 searchKey 大于 mid 的值，则将 left 更新为 mid + 1，缩小到右半部分。
- * 	•	不断缩小的查找范围最终会导致 left 和 right 的位置不断靠近。
- * 	2.	无解情况：
- * 	•	假设目标值 searchKey 不在数组中，那么缩小范围的过程会继续，直到 left 超过 right。
- * 	•	当 left > right 时，查找范围为空，说明数组中已没有可以检查的值。这表明目标值不存在，因此可以返回 -1 表示未找到。
- * 	3.	递归和终止条件：
- * 	•	递归实现时，if (left > right) 也充当了终止条件，确保查找结束。
- * 	•	达到 left > right 是二分查找中唯一可能不返回结果的情况，因此直接返回 -1 表示目标值不在数组中。
- *
+ * <p>
+ * 1.	查找范围缩小：
+ * •	每次查找时，通过调整 left 或 right 来缩小查找范围。具体来说：
+ * •	如果 searchKey 小于 mid 的值，则将 right 更新为 mid - 1，缩小到左半部分。
+ * •	如果 searchKey 大于 mid 的值，则将 left 更新为 mid + 1，缩小到右半部分。
+ * •	不断缩小的查找范围最终会导致 left 和 right 的位置不断靠近。
+ * 2.	无解情况：
+ * •	假设目标值 searchKey 不在数组中，那么缩小范围的过程会继续，直到 left 超过 right。
+ * •	当 left > right 时，查找范围为空，说明数组中已没有可以检查的值。这表明目标值不存在，因此可以返回 -1 表示未找到。
+ * 3.	递归和终止条件：
+ * •	递归实现时，if (left > right) 也充当了终止条件，确保查找结束。
+ * •	达到 left > right 是二分查找中唯一可能不返回结果的情况，因此直接返回 -1 表示目标值不在数组中。
+ * <p>
  * 例子
- *
+ * <p>
  * 比如，查找一个不在数组 {10, 20, 33, 55, 99, 99, 200, 300} 中的值 500：
- *
- * 	•	初始范围：left = 0，right = 7
- * 	•	不断调整 left 和 right 后，最终会到达 left = 8，right = 7，这时 left > right，表示没有找到 500。
- *
+ * <p>
+ * •	初始范围：left = 0，right = 7
+ * •	不断调整 left 和 right 后，最终会到达 left = 8，right = 7，这时 left > right，表示没有找到 500。
  */
 public class BinarySearchDemo {
 
     public static void main(String[] args) {
 
         int[] arr = {10, 20, 33, 55, 99, 99, 200, 300};
-        int i = binarySearch(arr, 0, arr.length-1, 200);
+        int i = binarySearch(arr, 0, arr.length - 1, 200);
         System.out.println("下标索引位置" + i);
         List<Integer> integers = binarySearchToList2(arr, 0, arr.length - 1, 99);
         System.out.println(Arrays.toString(integers.toArray()));
+
+
+        List<Integer> integers1 = binarySearchByWhile(arr, 99);
+        System.out.println(Arrays.toString(integers1.toArray()));
     }
 
     /**
@@ -149,7 +152,34 @@ public class BinarySearchDemo {
 
 
     /**
-     *  这里是正确的版本
+     *  通过循环的二分查找法
+     * @param arr
+     * @param target
+     * @return
+     */
+    public static List<Integer> binarySearchByWhile(int[] arr, int target) {
+        List<Integer> result = new ArrayList<>();
+        int left = 0;
+        int right = arr.length - 1;
+
+        while (left <= right) {
+            int mid = (left + right) / 2;
+            if (arr[mid] == target) {
+                result.add(mid);
+                break;
+            } else if (arr[mid] > target) {
+                right = mid - 1;
+            } else if (arr[mid] < target) {
+                left = mid + 1;
+            }
+        }
+        return result;
+    }
+
+
+    /**
+     * 这里是正确的版本
+     *
      * @param arr
      * @param left
      * @param right
