@@ -107,6 +107,29 @@ package com.axon.java.stack.algorithms.dynamic.programming;
 public class DynamicProgrammingAlgorithm {
 
     public static void main(String[] args) {
+        int []	weights = {2, 3, 4, 5} ;
+	    int [] values = {3, 4, 5, 6};
+	    int capacity = 8;
+        knapsack(weights,values,capacity);
+    }
 
+
+    public static int knapsack(int[] weights, int[] values, int capacity) {
+        int n = weights.length;
+        int[][] dp = new int[n + 1][capacity + 1];
+
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= capacity; j++) {
+                if (j < weights[i - 1]) {
+                    dp[i][j] = dp[i - 1][j]; // 容量不足，不能选
+                } else {
+                   int  x=  dp[i - 1][j];
+                   int y= dp[i - 1][j - weights[i - 1]];
+                   int value=values[i - 1];
+                    dp[i][j] = Math.max(x,y + value); // 选或不选
+                }
+            }
+        }
+        return dp[n][capacity];
     }
 }
