@@ -1,0 +1,21 @@
+-- 查看当前的编码格式
+SHOW VARIABLES LIKE 'character_set_%';
+
+--查看当前数据库的编码格式
+SHOW CREATE DATABASE dbName;
+
+如果格式不正确，可以通过以下的方式进行修改：
+
+更改 MySQL 服务器的默认字符集为 utf8mb4：
+    •可以通过修改 MySQL 配置文件来永久更改服务器的字符集。找到 MySQL 配置文件 my.cnf（通常位于 /etc/mysql/my.cnf 或 /etc/my.cnf，具体路径取决于系统和安装方式），然后添加或修改以下内容：
+
+character-set-server=utf8mb4
+collation-server=utf8mb4_general_ci
+
+添加完成之后，重启， 重启方式有以下几种:
+
+sudo systemctl restart mysql
+
+sudo service mysqld restart
+
+sudo service mysql restart
