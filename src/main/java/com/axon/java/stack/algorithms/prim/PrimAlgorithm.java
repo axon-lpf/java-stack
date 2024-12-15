@@ -5,71 +5,104 @@ import lombok.Data;
 import java.util.Arrays;
 
 /**
- *  普利姆算法
+ * 普利姆算法
  */
 public class PrimAlgorithm {
 
 
     public static void main(String[] args) {
 
+        int[][] weight = new int[][]{
+                {10000, 5, 7, 10000, 10000, 10000, 2},
+                {5, 10000, 10000, 9, 10000, 10000, 3},
+                {7, 10000, 10000, 10000, 8, 10000, 10000},
+                {10000, 9, 10000, 10000, 10000, 4, 10000},
+                {10000, 10000, 8, 10000, 10000, 5, 4},
+                {10000, 10000, 10000, 4, 5, 10000, 6},
+                {2, 3, 10000, 10000, 4, 6, 10000}};
+
+        char[] data = {'A', 'B', 'C', 'D', 'E', 'F', 'G'};
+        MinTree minTree = new MinTree();
+        Graph graph = new Graph(data.length);
+        minTree.createMinTree(graph, data.length, data, weight);
+
+        minTree.showMinTree(graph);
+
+        minTree.prim(graph, 1);
     }
+
+
 }
 
 
 /**
- *  最小生成树
+ * 最小生成树
  */
-class  MinTree{
-
-    private Graph graph;
-
-    public MinTree(Graph graph) {
-        this.graph = graph;
-    }
-
-
+class MinTree {
     /**
-     *  创建最小生成树
+     * 创建最小生成树
+     *
      * @param vertex
      * @param data
      * @param weights
      */
-    public  void  createMinTree(int vertex,char[] data, int [][] weights){
-        this.graph.setVertex(vertex);
+    public void createMinTree(Graph graph, int vertex, char[] data, int[][] weights) {
+        graph.vertex = vertex;
+        graph.data = new char[vertex];
         for (int i = 0; i < vertex; i++) {
-            this.graph.setData(data[i]);
+            graph.data[i] = data[i];
             for (int j = 0; j < vertex; j++) {
-                this.graph.getWeights()[i][j]=weights[i][j];
+                graph.weights[i][j] = weights[i][j];
             }
 
         }
     }
 
     /**
-     *  显示最小生成树
+     * 显示最小生成树
      */
-    public  void  showMinTree(){
-        int[][] weights = this.graph.getWeights();
-        for (int [] line : weights) {
+    public void showMinTree(Graph graph) {
+        int[][] weights = graph.weights;
+        for (int[] line : weights) {
             System.out.println(Arrays.toString(line));
         }
     }
 
 
-    public  void  prim( int vertex){
+    /**
+     * 普利姆算法
+     *
+     * @param graph
+     * @param vertex
+     */
+    public void prim(Graph graph, int vertex) {
 
-        int [] visited = new int[this.graph.getVertex()];
+        int h1 = -1;
+        int h2 = -1;
+        int minWeight = 10000; // 将minWeight赋值一个最大数，在后续中会被替换
 
-        for (int k = 1; k < this.graph.getVertex(); k++) {
+        int[] visited = new int[graph.vertex];
 
-            for (int i = 0; i < this.graph.getVertex(); i++) {
+        visited[vertex] = 1;
 
-                for (int j = 0; j < this.graph.getVertex(); j++) {
+        //因为有graph.vertex-1个顶点，普利姆算法结束之后，有graph.vertex-1个边
+        for (int k = 1; k < graph.vertex; k++) {
 
-                    if (visited[i]==1 && visited[j]==0 && this.graph.getWeights()[i][j]<10000) {}
+            for (int i = 0; i < graph.vertex; i++) { //i 表示被访问过的节点
+
+                for (int j = 0; j < graph.vertex; j++) { // j表示还没有被访问过的节点
+
+                    if (visited[i] == 1 && visited[j] == 0 && graph.weights[i][j] < minWeight) {
+                        //替换minWeight，寻找未访问过的节点和已访问节点的最小值。
+                        minWeight = graph.weights[i][j];
+                        h1 = i;
+                        h2 = j;
+                    }
                 }
             }
-
+            System.out.println("边>>" + graph.data[h1] + "," + graph.data[h2] + "，权值" + minWeight);
+            visited[h2] = 1;
+            minWeight = 10000;
         }
     }
 
@@ -77,22 +110,21 @@ class  MinTree{
 
 
 /**
- *  图截图
+ * 图截图
  */
-@Data
-class Graph{
+class Graph {
 
-    private  char [] data;
+    public char[] data;
 
-    private int [] [] weights;
+    public int[][] weights;
 
-    private  int vertex;
+    public int vertex;
 
 
-    public Graph(int vertex){
+    public Graph(int vertex) {
         this.vertex = vertex;
         data = new char[vertex];
-        this.weights=new int[vertex][ vertex];
+        this.weights = new int[vertex][vertex];
     }
 
 }
