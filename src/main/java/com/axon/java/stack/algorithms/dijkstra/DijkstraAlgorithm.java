@@ -1,5 +1,7 @@
 package com.axon.java.stack.algorithms.dijkstra;
 
+import com.sun.javafx.robot.FXRobotImage;
+
 import java.util.Arrays;
 
 /**
@@ -12,21 +14,20 @@ public class DijkstraAlgorithm {
     public static void main(String[] args) {
 
         char[] vertex = {'A', 'B', 'C', 'D', 'E', 'F', 'G'};
-        //克鲁斯卡尔算法的邻接矩阵
-        int matrix[][] = {
-                /*A*//*B*//*C*//*D*//*E*//*F*//*G*/
-                /*A*/ {0, 12, INF, INF, INF, 16, 14},
-                /*B*/ {12, 0, 10, INF, INF, 7, INF},
-                /*C*/ {INF, 10, 0, 3, 5, 6, INF},
-                /*D*/ {INF, INF, 3, 0, 4, INF, INF},
-                /*E*/ {INF, INF, 5, 4, 0, 2, 8},
-                /*F*/ {16, 7, 6, INF, 2, 0, 9},
-                /*G*/ {14, INF, INF, INF, 8, 9, 0}
-        };
-
+        //邻接矩阵
+        int[][] matrix = new int[vertex.length][vertex.length];
+        final int N = 65535;// 表示不可以连接
+        matrix[0] = new int[]{N, 5, 7, N, N, N, 2};
+        matrix[1] = new int[]{5, N, N, 9, N, N, 3};
+        matrix[2] = new int[]{7, N, N, N, 8, N, N};
+        matrix[3] = new int[]{N, 9, N, N, N, 4, N};
+        matrix[4] = new int[]{N, N, 8, N, N, 5, 4};
+        matrix[5] = new int[]{N, N, N, 4, 5, N, 6};
+        matrix[6] = new int[]{2, 3, N, N, 4, 6, N};
         Dijkstra dijkstra = new Dijkstra(vertex, matrix);
         dijkstra.dijkstra(6);
 
+        dijkstra.shopDijkstra();
 
     }
 }
@@ -70,17 +71,17 @@ class Dijkstra {
      */
     public void update(int index) {
         int len;
-        for (int j = 1; j < matrix[index].length; j++) {
-            // 说明是连通道
-            if (matrix[index][j] < 65535) {
-                len = vertexDijkstra.getDis(index) + matrix[index][j];
+        for (int j = 0; j < matrix[index].length; j++) {
+            //出发顶点到index顶点的距离+从index顶点到j顶点的距离的和
+            len = vertexDijkstra.getDis(index) + matrix[index][j];
+            if (!vertexDijkstra.in(j) && len < vertexDijkstra.getDis(j)) {
 
-                if (!vertexDijkstra.in(index) && len < vertexDijkstra.getDis(j)) {
-                    //更新目标节点长度
-                    vertexDijkstra.updateDis(j, len);
-                    //更新前置顶点
-                    vertexDijkstra.updatePre(j, index);
-                }
+                //TODO 更新前置顶点 ，位置不要搞错
+                vertexDijkstra.updatePre(j, index);
+
+                //更新目标节点长度
+                vertexDijkstra.updateDis(j, len);
+
             }
         }
     }
@@ -92,15 +93,35 @@ class Dijkstra {
      * @return
      */
     public int getMinLengthIndex() {
-        int min = 0, index = -1;
+        //TODO 特别注意这里的写法 取得里面最小的值
+        int min =65535, index = -1;
         for (int i = 0; i < vertex.length; i++) {
-            if (!vertexDijkstra.in(i) && min < vertexDijkstra.dis[i]) {
+            if (!vertexDijkstra.in(i) &&  vertexDijkstra.dis[i]<min) {
                 min = vertexDijkstra.dis[i];
                 index = i;
             }
         }
-        vertexDijkstra.already_visited[index]=1;
+        vertexDijkstra.already_visited[index] = 1;
         return index;
+    }
+
+
+
+    public void shopDijkstra() {
+        for (int i = 0; i < vertexDijkstra.already_visited.length; i++) {
+
+            System.out.print(vertexDijkstra.already_visited[i] + " ");
+        }
+        System.out.println();
+
+        for (int i = 0; i < vertexDijkstra.pre.length; i++) {
+            System.out.print(vertexDijkstra.pre[i] + " ");
+        }
+        System.out.println();
+
+        for (int i = 0; i < vertexDijkstra.dis.length; i++) {
+            System.out.print(vertexDijkstra.dis[i] + " ");
+        }
     }
 
 
@@ -123,8 +144,8 @@ class VertexDijkstra {
         pre = new int[length];
         dis = new int[length];
         Arrays.fill(dis, 65535);
-        dis[index]=0;
-        already_visited[index]=1;
+        dis[index] = 0;
+        already_visited[index] = 1;
 
     }
 
@@ -139,13 +160,13 @@ class VertexDijkstra {
     }
 
     /**
-     * 更新前置节点
+     * 更新pre这个顶点的前驱顶点为index顶点。
      *
      * @param index 顶点下标
      * @param j     下标
      */
     public void updatePre(int index, int j) {
-        pre[j] = index;
+        pre[index] = j;
     }
 
     /**
@@ -167,5 +188,7 @@ class VertexDijkstra {
     public int getDis(int index) {
         return dis[index];
     }
+
+
 
 }
