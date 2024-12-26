@@ -1,0 +1,19 @@
+嗯，我总结下我这边的发现，单纯从jvm的角度分析，目前发现3个问题：
+
+1.没有显式设置DirectMemorySize和MetaspaceSize，这部分内存进会在fullgc时进行回收，所以内存的增长，可能是这两部分占用在增加，但是由于老年代满，没有达成触发full gc的条件，导致这部分内存一直无法回收。
+
+建议增加配置：
+-XX:MaxDirectMemorySize=512m
+-XX:MetaspaceSize=128m
+-XX:MaxMetaspaceSize=512m
+
+2.没有设置cms垃圾回收触发的阀值（CMSInitiatingOccupancyFraction），这个值jdk8默认是92%。
+可以把这个值改成75%，让垃圾回收更早的介入。
+
+建议增加配置：
+-XX:CMSInitiatingOccupancyFraction=75
+
+3.从gc日志分析，年轻代的使用率过高，老年代的使用率较低只有23%。可以扩大年轻代（-Xmn1.5g）的占比到堆内存的50%，加快年轻代对象晋升老年代年龄的配置（MaxTenuringThreshold）,jdk默认值是15次
+建议变更配置：
+-XX:MaxTenuringThreshold=6
+-Xmn1.5g
