@@ -25,12 +25,12 @@ public class ReferenceDemo {
     public static void main(String[] args) {
         MyReferenceObject myReferenceObject = new MyReferenceObject();
 
-        System.out.println("GC  before object,内存够用" + myReferenceObject);
+        System.out.println("GC回收参数设置  before object,内存够用" + myReferenceObject);
 
         myReferenceObject = null;
 
         System.gc();
 
-        System.out.println("GC after object，内存够用" + myReferenceObject);
+        System.out.println("GC回收参数设置 after object，内存够用" + myReferenceObject);
     }
 }

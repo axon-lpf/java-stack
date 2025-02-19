@@ -98,7 +98,7 @@ import java.util.concurrent.locks.ReentrantLock;
  *                 final Node p = node.predecessor();    //自旋获取当前节点的上一节点，
  *                 if (p == head && tryAcquire(arg)) {   // 判断当前p是否等于头结点， 如果等于，说明已经排到队， 则继续尝试获取设置状态位， 即抢锁操作
  *                     setHead(node); // 如果 抢占成功， 则设置当前节点为头节点，
- *                     p.next = null; // help GC  // 设置当前节点的上一节点的后指针为空
+ *                     p.next = null; // help GC回收参数设置  // 设置当前节点的上一节点的后指针为空
  *                     failed = false;        //设置是否失败过
  *                     return interrupted;     // 返回
  *                 }
@@ -215,7 +215,7 @@ import java.util.concurrent.locks.ReentrantLock;
  *                 unparkSuccessor(node);   // 如果前驱节点是头节点（head），则通过 unparkSuccessor(node) 方法来唤醒当前节点的后继节点，以继续争抢锁。
  *             }
  *
- *             node.next = node; // help GC
+ *             node.next = node; // help GC回收参数设置
  *         }
  *     }
  *
