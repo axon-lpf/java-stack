@@ -1,0 +1,13 @@
+EXPLAIN SELECT * FROM table;
+
+执行 EXPLAIN 后，MySQL 会显示有关查询的执行计划，输出包括以下几列信息：
+	•	id：查询的唯一标识符。
+	•	select_type：查询的类型，例如 SIMPLE（简单查询）、PRIMARY（主查询）、SUBQUERY（子查询）等。
+	•	table：查询的表。
+	•	type：访问类型，表示查询使用的算法，如 ALL（全表扫描）、index（索引扫描）等。
+	•	possible_keys：可能使用的索引。
+	•	key：实际使用的索引。
+	•	key_len：使用索引的长度。
+	•	ref：显示哪些列或常数与索引的值进行比较。
+	•	rows：估计要读取的行数。
+	•	Extra：额外信息，例如 Using index、Using where、Using temporary 等。
