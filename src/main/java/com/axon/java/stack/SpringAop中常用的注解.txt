@@ -1,0 +1,103 @@
+@Aspect
+@Component
+public class MyAspect {
+    // 切点和通知定义
+}
+
+
+
+@Before("execution(* com.example.service.*.*(..))")
+public void beforeMethod(JoinPoint joinPoint) {
+    // 方法执行之前的操作
+}
+
+
+
+@After("execution(* com.example.service.*.*(..))")
+public void afterMethod(JoinPoint joinPoint) {
+    // 方法执行之后的操作
+}
+
+
+
+@AfterReturning(value = "execution(* com.example.service.*.*(..))", returning = "result")
+public void afterReturningMethod(Object result) {
+    // 方法返回值处理
+}
+
+
+
+@AfterThrowing(value = "execution(* com.example.service.*.*(..))", throwing = "ex")
+public void afterThrowingMethod(Exception ex) {
+    // 异常处理
+}
+
+
+
+@Around("execution(* com.example.service.*.*(..))")
+public Object aroundMethod(ProceedingJoinPoint joinPoint) throws Throwable {
+    // 方法执行前操作
+    Object result = joinPoint.proceed();  // 执行目标方法
+    // 方法执行后操作
+    return result;
+}
+
+
+
+@Pointcut("execution(* com.example.service.*.*(..))")
+public void serviceMethods() {
+    // 切点定义，可以在通知中引用
+}
+
+
+
+@Configuration
+@EnableAspectJAutoProxy
+public class AppConfig {
+    // 配置类，启用 AOP
+}
+
+
+@Aspect
+@Order(1)  // 优先级设置为1
+public class MyFirstAspect {
+    // 切面定义
+}
+
+@Aspect
+@Order(2)  // 优先级设置为2
+public class MySecondAspect {
+    // 切面定义
+}
+
+
+@Aspect
+@Order(1)  // 优先级设置为1
+public class MyFirstAspect {
+    // 切面定义
+}
+
+@Aspect
+@Order(2)  // 优先级设置为2
+public class MySecondAspect {
+    // 切面定义
+}
+
+
+
+
+
+
+总结
+	•	@Aspect：标记切面类。
+	•	@Before：前置通知。
+	•	@After：后置通知。
+	•	@AfterReturning：返回后通知。
+	•	@AfterThrowing：异常通知。
+	•	@Around：环绕通知。
+	•	@Pointcut：切点定义。
+	•	@EnableAspectJAutoProxy：启用基于注解的 AOP 支持。
+	•	@Order：切面执行顺序。
+
+这些注解使得 AOP 在 Spring 中非常灵活和强大，可以通过简单的注解来控制方法执行的不同阶段和行为。
+
