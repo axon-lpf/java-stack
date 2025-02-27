@@ -31,9 +31,6 @@ MessageQueue 是消息的存储单元，RocketMQ 中的每个 Topic 会分配多
 
 
 
-
-
-
 1. NameServer 存储的信息
 
 NameServer 是 RocketMQ 的一个轻量级的服务，用于管理和协调客户端与 Broker 之间的通信。它并不直接存储大量的消息或数据，而是作为路由信息的管理中心。具体存储和管理的内容包括：
