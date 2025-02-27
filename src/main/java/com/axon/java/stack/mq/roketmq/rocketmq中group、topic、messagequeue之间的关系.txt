@@ -45,5 +45,4 @@ NameServer 是 RocketMQ 的一个轻量级的服务，用于管理和协调客�
 	•	如果有多个 NameServer，它们是以集群的形式运行，提供高可用性。NameServer 会自动同步 Broker 信息，并且支持故障恢复。
 
 总结：
-
 NameServer 主要存储了Broker 的路由信息、Topic 和 MessageQueue 的映射关系以及 Broker 的状态信息，它是一个轻量级的路由和协调中心。生产者和消费者都需要向 NameServer 查询，才能获得当前 Topic 所在的 Broker 信息。
