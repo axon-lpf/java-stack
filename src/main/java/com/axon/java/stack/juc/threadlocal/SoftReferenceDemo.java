@@ -48,25 +48,25 @@ public class SoftReferenceDemo {
         MyReferenceObject myReferenceObject = new MyReferenceObject();
         SoftReference<MyReferenceObject> softReference = new SoftReference<>(myReferenceObject);
 
-        System.out.println("Before GC: Soft Reference get() - " + softReference.get());
+        System.out.println("Before GC回收参数设置: Soft Reference get() - " + softReference.get());
 
         myReferenceObject = null;
         System.gc();
 
-        System.out.println("After GC: Soft Reference get() - " + softReference.get());
+        System.out.println("After GC回收参数设置: Soft Reference get() - " + softReference.get());
     }
 
     private static void memeryOver() {
         MyReferenceObject myReferenceObject = new MyReferenceObject();
         SoftReference<MyReferenceObject> softReference = new SoftReference<>(myReferenceObject);
 
-        System.out.println("Before GC: Soft Reference get() - " + softReference.get());
+        System.out.println("Before GC回收参数设置: Soft Reference get() - " + softReference.get());
 
         byte[] memoryFiller = new byte[1024 * 1024 * 100]; // 分配100MB内存
         myReferenceObject = null;
         System.gc();
 
-        System.out.println("After GC: Soft Reference get() - " + softReference.get());
+        System.out.println("After GC回收参数设置: Soft Reference get() - " + softReference.get());
     }
 
 }

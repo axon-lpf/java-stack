@@ -1,0 +1,49 @@
+在 Java 中，HashMap 和 ConcurrentHashMap 都是常用的 Map 实现类，但它们在 线程安全性 和 性能优化 等方面有显著的不同。下面是它们的主要区别：
+
+1. 线程安全性
+	•	HashMap：
+	•	HashMap 是 非线程安全 的。如果多个线程同时访问 HashMap，并且至少有一个线程修改了结构（如 put 或 remove 操作），则可能会导致数据不一致的情况。
+	•	线程安全问题通常通过外部同步来解决，比如使用 synchronized 或者 Collections.synchronizedMap 包装。
+	•	ConcurrentHashMap：
+	•	ConcurrentHashMap 是 线程安全 的，它在设计时考虑了高并发的场景。它通过 分段锁（Segment Locking）来保证并发访问的安全性。
+	•	不同的桶（段）会被加锁，因此多个线程可以并发地操作不同段的数据，从而提高并发性能。
+
+2. 性能
+	•	HashMap：
+	•	由于没有任何锁机制，HashMap 在单线程环境下性能较好，但在多线程环境下，如果没有额外同步措施，它可能会发生数据竞态和不一致问题。
+	•	ConcurrentHashMap：
+	•	在高并发场景下，ConcurrentHashMap 具有更好的性能，因为它在内部使用了 分段锁（在 JDK 7 及之前的实现中）和 锁分离机制（在 JDK 8 中进行了优化，使用了更细粒度的锁和 CAS 操作）。
+	•	ConcurrentHashMap 的读取操作（如 get）通常不需要加锁，因此在多线程环境下读取性能非常高。
+
+3. 锁机制
+	•	HashMap：
+	•	HashMap 本身不提供任何内部同步，因此多线程环境下需要外部显式同步，才能保证线程安全。
+	•	ConcurrentHashMap：
+	•	ConcurrentHashMap 内部使用了 分段锁机制 和 锁粒度控制，每个桶（Segment）有独立的锁。
+	•	在 JDK 8 中，ConcurrentHashMap 使用了更细粒度的锁（具体来说是使用了 CAS 操作和 同步块）来进一步提高并发性能。它还通过 锁分离 和 无锁操作 来优化并发性能。
+
+4. 操作行为
+	•	HashMap：
+	•	HashMap 中的 put、remove 和其他修改结构的方法是 非线程安全 的。当多个线程同时访问这些方法时，可能会导致 竞态条件、数据丢失 或 结构破坏。
+	•	ConcurrentHashMap：
+	•	ConcurrentHashMap 中的 put、remove 等方法是线程安全的，并且能够支持并发更新而不会阻塞其他线程的读取操作。例如，多个线程可以同时对不同的桶进行修改，而不会互相干扰。
+	•	ConcurrentHashMap 还支持 原子操作，如 putIfAbsent、replace 和 compute 等，这些操作都是线程安全的。
+
+5. 迭代器
+	•	HashMap：
+	•	在 HashMap 中，迭代器是 fail-fast 的。如果在迭代过程中，HashMap 被其他线程修改，会抛出 ConcurrentModificationException 异常。
+	•	ConcurrentHashMap：
+	•	ConcurrentHashMap 的迭代器是 弱一致性（weakly consistent）的。它允许在迭代过程中进行结构修改（例如插入、删除），但是不会抛出 ConcurrentModificationException。不过，迭代器返回的元素状态可能是修改过的，但不会保证完全一致。
+
+6. 空值
+	•	HashMap：
+	•	HashMap 允许 null 作为键和值，即允许插入 null 键和 null 值。
+	•	ConcurrentHashMap：
+	•	ConcurrentHashMap 不允许 存储 null 键或 null 值。如果尝试插入 null 键或 null 值，会抛出 NullPointerException 异常。
+
+7. 适用场景
+	•	HashMap：
+	•	HashMap 适用于单线程环境，或者通过外部同步措施确保线程安全的多线程环境。
+	•	在不要求并发访问或高并发的情况下，HashMap 的性能通常优于 ConcurrentHashMap。
+	•	ConcurrentHashMap：
+	•	ConcurrentHashMap 适用于高并发的多线程环境，特别是在需要大量线程并发读写的场景，如并发处理任务、缓存系统等。

@@ -15,9 +15,9 @@ package com.axon.java.stack.juc.thread;
  *
  *
  *  chatGpt总结：
- * 	interrupt() 方法：
+ * 	1.interrupt() 方法：
  * 	•	interrupt() 方法不会立刻终止线程，而是向线程发送一个中断信号。线程在收到中断信号后，可以根据中断状态决定如何处理。通常情况下，线程会在下一个检查点或被阻塞的操作时响应中断信号。
- * 	2.	isInterrupted() 方法：
+ * 	2.isInterrupted() 方法：
  * 	•	isInterrupted() 方法用于检查线程是否被中断。如果线程被中断过，它将返回 true。
  * 	•	需要注意的是，isInterrupted() 不会清除线程的中断状态，即多次调用 isInterrupted() 后，只要线程未清除中断状态，返回的值依然是 true。
  * 	3.	中断状态的清除：

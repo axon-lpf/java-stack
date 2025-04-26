@@ -43,7 +43,7 @@ public class ListTest {
 
     private static void hashMapTest() throws InterruptedException {
         /**
-         * HashMap 和 ConcurrentHashMap 是 Java 中的两种常用的映射集合，它们在设计和使用场景上有一些显著的区别，特别是在并发编程中。
+         * HashMap 和 ConcurrentHashMap.txt 是 Java 中的两种常用的映射集合，它们在设计和使用场景上有一些显著的区别，特别是在并发编程中。
          *
          * 主要区别
          *

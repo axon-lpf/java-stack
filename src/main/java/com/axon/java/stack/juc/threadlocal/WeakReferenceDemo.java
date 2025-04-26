@@ -34,13 +34,13 @@ public class WeakReferenceDemo {
 
         WeakReference<MyReferenceObject> weakReference = new WeakReference<>(myReferenceObject);
 
-        System.out.println("Before GC: Weak Reference get() - " + weakReference.get());
+        System.out.println("Before GC回收参数设置: Weak Reference get() - " + weakReference.get());
 
         myReferenceObject = null;
 
         System.gc();
 
-        System.out.println("After GC: Weak Reference get() - " + weakReference.get());
+        System.out.println("After GC回收参数设置: Weak Reference get() - " + weakReference.get());
 
         //弱引用对象在下一次垃圾回收时会被回收，因此 weakReference.get() 可能会返回 null。
 

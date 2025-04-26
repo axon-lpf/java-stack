@@ -1,0 +1,12 @@
+BiConsumer 和 Function 都是 Java 8 引入的函数式接口，但它们的用途和特性有很大的区别：
+
+特性	BiConsumer<T, U>	Function<T, R>
+参数	两个参数 (T, U)	一个参数 (T)
+返回值	无返回值 (void)	有返回值 (R)
+适用场景	适用于 执行操作，例如遍历、修改数据，不关心返回值	适用于 数据转换，例如映射、计算、返回新值
+常见用途	- 遍历 Map 处理 (key, value)
+- 记录日志
+- 处理双输入数据	- 将 T 转换成 R
+- 计算新值
+- 数据映射
+方法名	accept(T t, U u)	apply(T t) -> R
