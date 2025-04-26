@@ -5,6 +5,8 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
+import com.axon.java.stack.netty.tcp.protocol.MessageProtocol;
+
 import java.nio.charset.Charset;
 
 public class TcpProtocolClientHandler extends SimpleChannelInboundHandler<MessageProtocol> {
