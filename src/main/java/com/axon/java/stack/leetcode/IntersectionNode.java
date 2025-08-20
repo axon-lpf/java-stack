@@ -45,6 +45,8 @@ public class IntersectionNode {
     /**
      * 假设传入 listA = [1,9,1,2,4], listB = [3,2,4]，我们来看看算法是如何执行的：
      *
+     *
+     *
      * 初始化： pA = 1 (listA的头节点) pB = 3 (listB的头节点)
      *
      * 第1次循环： pA != pB, 所以继续 pA = 9 (pA.next) pB = 2 (pB.next)
@@ -70,6 +72,9 @@ public class IntersectionNode {
      * 这个算法的巧妙之处在于，通过让两个指针分别遍历两个链表，然后在到达末尾时切换到另一个链表的头部，它实际上抵消了两个链表长度的差异。当两个指针相遇时，它们要么在交点处相遇（如果存在交点），要么同时到达null（如果不存在交点）。
      *
      * 在这个特定的例子中，pA遍历了 [1,9,1,2,4,3,2]，而pB遍历了 [3,2,4,1,9,1,2]，它们在第二个值为2的节点处相遇，这就是两个链表的交点。
+     *
+     * listA = [1,9,1,2,4,3,2]
+     * listB = [3,2,4,1,9,1,2]
      * @param args
      */
     public static void main(String[] args) {
