@@ -75,7 +75,6 @@ public class IntersectionNode {
      *
      * listA = [1,9,1,2,4,3,2]
      * listB = [3,2,4,1,9,1,2]
-     * @param args
      */
     public static void main(String[] args) {
 
