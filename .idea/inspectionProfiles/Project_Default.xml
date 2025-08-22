@@ -33,7 +33,7 @@
       <option name="myAdditionalJavadocTags" value="date" />
     </inspection_tool>
     <inspection_tool class="JavadocDeclaration" enabled="true" level="WARNING" enabled_by_default="true">
-      <option name="ADDITIONAL_TAGS" value="date,author：liupengfei,date：2025/7/31,description：,date：2025/8/4,date：2025/8/20,date：2025/8/21" />
+      <option name="ADDITIONAL_TAGS" value="date,author：liupengfei,date：2025/7/31,description：,date：2025/8/4,date：2025/8/20,date：2025/8/21,date：2025/8/22" />
     </inspection_tool>
     <inspection_tool class="MissingJavadoc" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="PACKAGE_SETTINGS">
